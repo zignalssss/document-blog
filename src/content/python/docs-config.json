@@ -1,0 +1,46 @@
+{
+  "navigation": [
+    {
+      "title": "เริ่มต้นใช้งาน",
+      "slug": "getting-started",
+      "items": [
+        {
+          "title": "แนะนำ Python",
+          "slug": "getting-started/introduction"
+        },
+        {
+          "title": "การติดตั้ง",
+          "slug": "getting-started/installation"
+        }
+      ]
+    },
+    {
+      "title": "พื้นฐาน Python",
+      "slug": "basics",
+      "items": [
+        {
+          "title": "ตัวแปรและชนิดข้อมูล",
+          "slug": "basics/variables"
+        },
+        {
+          "title": "Control Flow",
+          "slug": "basics/control-flow"
+        }
+      ]
+    },
+    {
+      "title": "ขั้นสูง",
+      "slug": "advanced",
+      "items": [
+        {
+          "title": "OOP",
+          "slug": "advanced/oop"
+        },
+        {
+          "title": "Decorators",
+          "slug": "advanced/decorators"
+        }
+      ]
+    }
+  ]
+}

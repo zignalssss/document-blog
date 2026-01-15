@@ -1,11 +1,75 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
+import projectsConfig from '../../projects-config.json';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const { projects } = projectsConfig;
+
+// สำหรับแต่ละ project, หาหน้าแรก
+const projectLinks = await Promise.all(projects.map(async (project) => {
+  try {
+    const configModule = await import(`../content/${project.id}/docs-config.json`);
+    const { navigation } = configModule.default;
+    // ใช้หน้าแรกของ section แรก
+    const firstSlug = navigation[0]?.items[0]?.slug || 'introduction';
+    return {
+      ...project,
+      url: `/${project.id}/${firstSlug}`
+    };
+  } catch {
+    return {
+      ...project,
+      url: `/${project.id}/getting-started/introduction`
+    };
+  }
+}));
 ---
 
-<Layout>
-	<Welcome />
+<Layout title="Documentation Hub">
+  <div class="min-h-screen bg-slate-925 py-16 px-8">
+    <header class="text-center mb-16">
+      <h1 class="text-6xl font-bold text-slate-50 mb-4">Documentation Hub</h1>
+      <p class="text-2xl text-slate-400">เลือก Content ที่ต้องการเรียนรู้</p>
+    </header>
+
+    <div class="max-w-6xl mx-auto grid grid-cols-[repeat(auto-fit,minmax(350px,1fr))] gap-8 mb-16">
+      {projectLinks.map((project) => (
+        <a 
+          href={project.url} 
+          class="group relative overflow-hidden bg-slate-800 border-2 border-slate-700 rounded-2xl p-10 no-underline transition-all duration-300 hover:-translate-y-2 hover:border-blue-400 hover:shadow-[0_20px_40px_rgba(59,130,246,0.2)]"
+        >
+          <div 
+            class="w-20 h-20 rounded-2xl flex items-center justify-center mb-6 text-4xl"
+            style={`background: ${project.color}20; color: ${project.color}`}
+          >
+            <span>{project.icon}</span>
+          </div>
+          <h2 class="text-3xl font-semibold text-slate-50 mb-3">{project.title}</h2>
+          <p class="text-lg text-slate-400 leading-relaxed mb-6">{project.description}</p>
+          <div class="absolute bottom-8 right-8 text-3xl text-blue-400 opacity-0 -translate-x-3 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0">
+            →
+          </div>
+        </a>
+      ))}
+    </div>
+
+    <footer class="text-center text-slate-500 text-base">
+      <p>เลือก documentation ที่ต้องการด้านบน</p>
+    </footer>
+  </div>
 </Layout>
+
+<style>
+  @media (max-width: 768px) {
+    .text-6xl {
+      font-size: 2.5rem;
+    }
+
+    .text-2xl {
+      font-size: 1.25rem;
+    }
+
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,151 @@
+---
+title: "ตัวแปรและชนิดข้อมูล"
+description: "เรียนรู้เกี่ยวกับตัวแปรและชนิดข้อมูลใน Python"
+order: 1
+category: "basics"
+---
+
+# ตัวแปรและชนิดข้อมูล
+
+## การประกาศตัวแปร
+
+Python ไม่ต้องระบุชนิดข้อมูล (Dynamic Typing):
+
+```python
+# ตัวเลข
+age = 25
+price = 99.99
+
+# ข้อความ
+name = "Python"
+message = 'Hello World'
+
+# Boolean
+is_active = True
+has_permission = False
+```
+
+## ชนิดข้อมูลพื้นฐาน
+
+### Numbers
+
+```python
+# Integer
+x = 10
+y = -5
+
+# Float
+pi = 3.14159
+temperature = -12.5
+
+# Complex
+z = 2 + 3j
+```
+
+### Strings
+
+```python
+# String methods
+text = "Hello Python"
+print(text.upper())      # HELLO PYTHON
+print(text.lower())      # hello python
+print(text.split())      # ['Hello', 'Python']
+
+# F-strings
+name = "Alice"
+age = 30
+print(f"{name} อายุ {age} ปี")
+```
+
+### Lists
+
+```python
+# List (เปลี่ยนแปลงได้)
+fruits = ["apple", "banana", "orange"]
+fruits.append("mango")
+fruits[0] = "grape"
+
+# List operations
+numbers = [1, 2, 3, 4, 5]
+print(numbers[0])      # 1
+print(numbers[-1])     # 5
+print(numbers[1:3])    # [2, 3]
+```
+
+### Tuples
+
+```python
+# Tuple (เปลี่ยนแปลงไม่ได้)
+coordinates = (10, 20)
+rgb = (255, 128, 0)
+
+# Unpacking
+x, y = coordinates
+```
+
+### Dictionaries
+
+```python
+# Dictionary
+person = {
+    "name": "John",
+    "age": 30,
+    "city": "Bangkok"
+}
+
+# เข้าถึงข้อมูล
+print(person["name"])
+print(person.get("age"))
+
+# เพิ่ม/แก้ไข
+person["email"] = "john@example.com"
+person["age"] = 31
+```
+
+### Sets
+
+```python
+# Set (ไม่ซ้ำ, ไม่มีลำดับ)
+unique_numbers = {1, 2, 3, 4, 5}
+unique_numbers.add(6)
+unique_numbers.add(1)  # ไม่เพิ่มเพราะมีแล้ว
+
+# Set operations
+a = {1, 2, 3}
+b = {3, 4, 5}
+print(a | b)  # Union: {1, 2, 3, 4, 5}
+print(a & b)  # Intersection: {3}
+```
+
+## Type Conversion
+
+```python
+# String to Integer
+age = int("25")
+
+# Integer to String
+text = str(123)
+
+# String to Float
+price = float("99.99")
+
+# List to Set
+unique = set([1, 2, 2, 3])  # {1, 2, 3}
+```
+
+## ตรวจสอบชนิดข้อมูล
+
+```python
+x = 42
+print(type(x))  # <class 'int'>
+
+y = "Hello"
+print(type(y))  # <class 'str'>
+
+z = [1, 2, 3]
+print(type(z))  # <class 'list'>
+
+# isinstance
+print(isinstance(x, int))    # True
+print(isinstance(y, str))    # True
+```

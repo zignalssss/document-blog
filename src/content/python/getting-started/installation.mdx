@@ -1,0 +1,83 @@
+---
+title: "การติดตั้ง Python"
+description: "คู่มือการติดตั้ง Python บนระบบต่างๆ"
+order: 2
+category: "getting-started"
+---
+
+# การติดตั้ง Python
+
+## ดาวน์โหลด Python
+
+ดาวน์โหลดจาก [python.org](https://www.python.org/downloads/)
+
+## ติดตั้งบน Windows
+
+1. ดาวน์โหลด installer
+2. ✅ เลือก "Add Python to PATH"
+3. คลิก "Install Now"
+
+ตรวจสอบการติดตั้ง:
+```bash
+python --version
+pip --version
+```
+
+## ติดตั้งบน macOS
+
+### ใช้ Homebrew (แนะนำ)
+
+```bash
+brew install python
+```
+
+### ใช้ Installer
+
+1. ดาวน์โหลด .pkg file
+2. เปิดไฟล์และติดตั้ง
+
+## ติดตั้งบน Linux
+
+### Ubuntu/Debian
+
+```bash
+sudo apt update
+sudo apt install python3 python3-pip
+```
+
+### Fedora
+
+```bash
+sudo dnf install python3 python3-pip
+```
+
+## การตั้งค่า Virtual Environment
+
+แนะนำให้ใช้ virtual environment:
+
+```bash
+# สร้าง venv
+python -m venv myenv
+
+# Activate
+# Windows
+myenv\Scripts\activate
+
+# macOS/Linux
+source myenv/bin/activate
+
+# ติดตั้ง packages
+pip install requests numpy pandas
+```
+
+## ตรวจสอบการติดตั้ง
+
+```python
+import sys
+print(f"Python version: {sys.version}")
+
+# ทดสอบ import
+import os
+import json
+print("✅ Python พร้อมใช้งาน!")
+```

@@ -1,0 +1,70 @@
+---
+interface NavItem {
+  title: string;
+  slug: string;
+}
+
+interface NavSection {
+  title: string;
+  slug: string;
+  items: NavItem[];
+}
+
+interface Props {
+  currentPath: string;
+  navigation?: NavSection[];
+  projectTitle?: string;
+  baseUrl?: string;
+}
+
+const { currentPath, navigation = [], projectTitle, baseUrl } = Astro.props;
+const title = projectTitle || 'Documentation';
+const urlBase = baseUrl || '/docs';
+
+const isActive = (slug: string) => {
+  return currentPath.includes(`${urlBase}/${slug}`) || currentPath.includes(`/${slug}`);
+};
+---
+
+<aside class="sticky top-8 h-fit p-6 bg-slate-800 rounded-lg border border-slate-700">
+  <div class="mb-6">
+    {baseUrl && <a href="/" class="inline-block text-blue-400 no-underline text-sm mb-4 hover:text-blue-300 transition-colors">← กลับหน้าหลัก</a>}
+    <h2 class="text-xl font-bold text-slate-50 mb-6">{title}</h2>
+  </div>
+  
+  {navigation && navigation.length > 0 ? (
+    <nav>
+      {navigation.map((section: NavSection) => (
+        <div class="mb-6">
+          <h3 class="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-2">{section.title}</h3>
+          <ul class="list-none p-0 m-0">
+            {section.items.map((item: NavItem) => (
+              <li class="mb-1">
+                <a 
+                  href={baseUrl ? `${baseUrl}/${item.slug}` : `/docs/${item.slug}`}
+                  class:list={[
+                    'block px-3 py-2 text-slate-300 no-underline rounded-md transition-all text-sm',
+                    isActive(item.slug) ? 'bg-blue-600 text-white font-medium' : 'hover:bg-slate-700 hover:text-slate-50'
+                  ]}
+                >
+                  {item.title}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </nav>
+  ) : (
+    <p class="text-slate-400 text-sm">No navigation available</p>
+  )}
+</aside>
+
+<style>
+  @media (max-width: 1024px) {
+    aside {
+      position: relative;
+      top: 0;
+    }
+  }
+</style>

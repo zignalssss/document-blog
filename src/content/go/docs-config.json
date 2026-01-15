@@ -1,0 +1,46 @@
+{
+  "navigation": [
+    {
+      "title": "เริ่มต้นใช้งาน",
+      "slug": "getting-started",
+      "items": [
+        {
+          "title": "แนะนำ Go",
+          "slug": "getting-started/introduction"
+        },
+        {
+          "title": "การติดตั้ง",
+          "slug": "getting-started/installation"
+        }
+      ]
+    },
+    {
+      "title": "พื้นฐาน Go",
+      "slug": "basics",
+      "items": [
+        {
+          "title": "ตัวแปรและชนิดข้อมูล",
+          "slug": "basics/variables"
+        },
+        {
+          "title": "Functions",
+          "slug": "basics/functions"
+        }
+      ]
+    },
+    {
+      "title": "Concurrency",
+      "slug": "concurrency",
+      "items": [
+        {
+          "title": "Goroutines",
+          "slug": "concurrency/goroutines"
+        },
+        {
+          "title": "Channels",
+          "slug": "concurrency/channels"
+        }
+      ]
+    }
+  ]
+}

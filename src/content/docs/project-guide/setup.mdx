@@ -1,0 +1,157 @@
+---
+title: "Setup Guide"
+description: "คู่มือการติดตั้งและตั้งค่า Documentation Site"
+order: 1
+category: "project-guide"
+---
+
+# Setup Guide
+
+คู่มือการติดตั้งและตั้งค่า Documentation Site แบบ Step-by-Step
+
+## ความต้องการของระบบ
+
+ก่อนเริ่มติดตั้ง ตรวจสอบว่าคุณมีสิ่งต่อไปนี้:
+
+- **Node.js** version 18 หรือสูงกว่า
+- **npm** หรือ **yarn** package manager
+- **Git** (สำหรับ clone repository)
+- Text Editor (แนะนำ VS Code)
+
+## ขั้นตอนการติดตั้ง
+
+### 1. Clone หรือ Download โปรเจค
+
+ถ้ามี repository อยู่แล้ว:
+
+```bash
+git clone <your-repository-url>
+cd document-blog
+```
+
+หรือสร้างโปรเจคใหม่:
+
+```bash
+mkdir my-docs-site
+cd my-docs-site
+```
+
+### 2. ติดตั้ง Dependencies
+
+```bash
+npm install
+```
+
+คำสั่งนี้จะติดตั้ง packages ที่จำเป็น:
+- `astro` - Framework หลัก
+- `@astrojs/mdx` - สำหรับเขียน MDX files
+
+### 3. ตรวจสอบโครงสร้างโปรเจค
+
+หลังติดตั้งเสร็จ ควรมีโครงสร้างแบบนี้:
+
+```
+/
+├── docs-config.json
+├── src/
+│   ├── content/
+│   │   ├── config.ts
+│   │   └── docs/
+│   ├── layouts/
+│   │   ├── Layout.astro
+│   │   └── DocsLayout.astro
+│   ├── components/
+│   │   ├── Sidebar.astro
+│   │   ├── Toc.astro
+│   │   └── CodeBlock.astro
+│   └── pages/
+│       └── docs/
+│           └── [...slug].astro
+├── package.json
+└── astro.config.mjs
+```
+
+### 4. เริ่มต้น Development Server
+
+```bash
+npm run dev
+```
+
+Server จะทำงานที่ `http://localhost:4321`
+
+### 5. ทดสอบการทำงาน
+
+เปิดเบราว์เซอร์ไปที่:
+```
+http://localhost:4321/docs/project-guide/setup
+```
+
+ถ้าเห็นหน้านี้ แสดงว่าติดตั้งสำเร็จแล้ว! 🎉
+
+## การตั้งค่าเพิ่มเติม
+
+### แก้ไขชื่อเว็บไซต์
+
+แก้ไขไฟล์ `src/layouts/Layout.astro`:
+
+```astro
+<title>ชื่อเว็บไซต์ของคุณ</title>
+```
+
+### เปลี่ยนภาษา
+
+แก้ไข `<html lang="th">` เป็นภาษาที่ต้องการ
+
+### ปรับแต่งสี Dark Mode
+
+แก้ไข CSS ใน:
+- `src/layouts/DocsLayout.astro`
+- `src/components/Sidebar.astro`
+- `src/components/Toc.astro`
+
+## คำสั่งที่ใช้บ่อย
+
+| คำสั่ง | ความหมาย |
+|--------|----------|
+| `npm run dev` | เริ่ม development server |
+| `npm run build` | Build สำหรับ production |
+| `npm run preview` | Preview production build |
+| `npm run astro -- --help` | ดูคำสั่ง Astro CLI |
+
+## การแก้ไขปัญหาที่พบบ่อย
+
+### Port 4321 ถูกใช้งานอยู่
+
+```bash
+# หา process ที่ใช้ port
+lsof -i :4321
+
+# หรือเปลี่ยน port
+npm run dev -- --port 3000
+```
+
+### Module Not Found Error
+
+```bash
+# ลบและติดตั้งใหม่
+rm -rf node_modules package-lock.json
+npm install
+```
+
+### MDX Files ไม่แสดง
+
+1. ตรวจสอบว่าไฟล์อยู่ใน `src/content/docs/`
+2. ตรวจสอบ frontmatter (title, description, category)
+3. Restart dev server
+
+## ขั้นตอนถัดไป
+
+- 📖 อ่าน [Usage Guide](./usage) เพื่อเรียนรู้วิธีเพิ่มเอกสาร
+- 🎨 ปรับแต่ง styles ตามความต้องการ
+- 🚀 Deploy ไปยัง hosting platform
+
+## ทรัพยากรเพิ่มเติม
+
+- [Astro Documentation](https://docs.astro.build)
+- [MDX Documentation](https://mdxjs.com)
+- [Google Fonts - Kanit](https://fonts.google.com/specimen/Kanit)

@@ -1,0 +1,37 @@
+@import "tailwindcss";
+
+@theme {
+  --font-family-kanit: 'Kanit', sans-serif;
+  --color-slate-925: #0f172a;
+  --color-slate-950: #020617;
+}
+
+/* Better list styling */
+.content ul {
+  list-style: none;
+}
+
+.content ul > li {
+  position: relative;
+  padding-left: 2rem;
+  margin-bottom: 1rem;
+}
+
+.content ul > li::before {
+  content: "•";
+  position: absolute;
+  left: 0.5rem;
+  top: 0.1em;
+  color: #60a5fa;
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+/* Inline code in text */
+.content p code,
+.content li code {
+  background: rgba(16, 185, 129, 0.1);
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.25rem;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}

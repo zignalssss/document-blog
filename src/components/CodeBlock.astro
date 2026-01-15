@@ -1,0 +1,18 @@
+---
+interface Props {
+  code: string;
+  lang?: string;
+  title?: string;
+}
+
+const { code, lang = 'text', title } = Astro.props;
+---
+
+<div class="my-6 rounded-lg overflow-hidden border border-slate-700">
+  {title && (
+    <div class="bg-slate-700 text-slate-200 px-4 py-2 text-sm font-medium font-mono">
+      {title}
+    </div>
+  )}
+  <pre class="m-0 p-4 bg-slate-800 overflow-x-auto"><code class="text-slate-200 font-mono text-sm leading-6">{code}</code></pre>
+</div>

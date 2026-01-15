@@ -1,0 +1,77 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+import Sidebar from '../../components/Sidebar.astro';
+import projectsConfig from '../../../projects-config.json';
+
+export async function getStaticPaths() {
+  const { projects } = projectsConfig;
+  const paths = [];
+
+  for (const projectConfig of projects) {
+    const project = projectConfig.id;
+    try {
+      const configModule = await import(`../../content/${project}/docs-config.json`);
+      const { navigation } = configModule.default;
+      
+      for (const section of navigation) {
+        for (const item of section.items) {
+          const slug = item.slug;
+          const [folder, file] = slug.split('/');
+          
+          try {
+            const mdxModule = await import(`../../content/${project}/${folder}/${file}.mdx`);
+            const { frontmatter, Content, getHeadings } = mdxModule;
+            const headings = await getHeadings();
+            
+            paths.push({
+              params: { 
+                project,
+                slug 
+              },
+              props: {
+                title: frontmatter.title,
+                description: frontmatter.description,
+                Content,
+                headings,
+                project
+              }
+            });
+          } catch (e) {
+            const error = e as Error;
+            console.warn(`Could not load ${project}/${slug}:`, error.message);
+          }
+        }
+      }
+    } catch (e) {
+      const error = e as Error;
+      console.warn(`Could not load config for ${project}:`, error.message);
+    }
+  }
+
+  return paths;
+}
+
+const { title, description, Content, headings, project } = Astro.props;
+const { slug } = Astro.params;
+
+// โหลด config ของ project
+const configModule = await import(`../../content/${project}/docs-config.json`);
+const docsConfig = configModule.default;
+
+// หา project info จาก projects-config.json
+const { projects } = projectsConfig;
+const currentProject = projects.find((p) => p.id === project);
+const projectTitle = currentProject ? `${currentProject.icon} ${currentProject.title}` : project;
+---
+
+<DocsLayout 
+  title={title} 
+  description={description} 
+  headings={headings}
+  navigation={docsConfig.navigation}
+  currentPath={Astro.url.pathname}
+  projectTitle={projectTitle}
+  baseUrl={`/${project}`}
+>
+  <Content />
+</DocsLayout>

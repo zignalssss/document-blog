@@ -1,0 +1,25 @@
+{
+  "projects": [
+    {
+      "id": "python",
+      "title": "Python Documentation",
+      "description": "คู่มือการใช้งาน Python เบื้องต้นถึงขั้นสูง",
+      "icon": "🐍",
+      "color": "#3776AB"
+    },
+    {
+      "id": "go",
+      "title": "Go Documentation", 
+      "description": "คู่มือการใช้งาน Go Lang สำหรับ Backend Development",
+      "icon": "🔷",
+      "color": "#00ADD8"
+    },
+    {
+      "id": "docs",
+      "title": "Project Documentation",
+      "description": "เอกสารโครงสร้างและการใช้งานระบบ",
+      "icon": "📚",
+      "color": "#8B5CF6"
+    }
+  ]
+}

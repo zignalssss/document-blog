@@ -1,0 +1,18 @@
+{
+  "navigation": [
+    {
+      "title": "Project Guide",
+      "slug": "project-guide",
+      "items": [
+        {
+          "title": "Setup Guide",
+          "slug": "project-guide/setup"
+        },
+        {
+          "title": "Usage Guide",
+          "slug": "project-guide/usage"
+        }
+      ]
+    }
+  ]
+}

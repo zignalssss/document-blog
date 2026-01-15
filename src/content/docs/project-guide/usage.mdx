@@ -1,0 +1,403 @@
+---
+title: "Usage Guide"
+description: "วิธีการใช้งานและเพิ่มเอกสารใหม่"
+order: 2
+category: "project-guide"
+---
+
+# Usage Guide
+
+คู่มือการใช้งาน Documentation Site - เรียนรู้วิธีเพิ่มและจัดการเอกสาร
+
+## ภาพรวมการทำงาน
+
+Documentation Site นี้ใช้ระบบ **Dynamic Navigation** ที่อิงจากไฟล์ `docs-config.json` ทำให้คุณสามารถเพิ่มหรือลบเอกสารได้ง่ายๆ โดยไม่ต้องแก้ไขโค้ดหลัก
+
+## การเพิ่มเอกสารใหม่
+
+### ขั้นตอนที่ 1: สร้างโฟลเดอร์และไฟล์ MDX
+
+สร้างโฟลเดอร์ใหม่ใน `src/content/docs/`:
+
+```bash
+mkdir src/content/docs/my-section
+```
+
+สร้างไฟล์ MDX:
+
+```bash
+touch src/content/docs/my-section/my-page.mdx
+```
+
+### ขั้นตอนที่ 2: เขียน Frontmatter
+
+เปิดไฟล์ที่สร้างและเพิ่ม frontmatter:
+
+```markdown
+---
+title: "ชื่อเอกสาร"
+description: "คำอธิบายสั้นๆ เกี่ยวกับเอกสารนี้"
+order: 1
+category: "my-section"
+---
+
+# ชื่อหัวข้อหลัก
+
+เนื้อหาเอกสารของคุณ...
+
+## หัวข้อย่อย
+
+รายละเอียดเพิ่มเติม
+```
+
+**Frontmatter Fields:**
+- `title`: ชื่อที่แสดงบนหน้าเอกสาร (required)
+- `description`: คำอธิบายสั้นๆ (required)
+- `order`: ลำดับการแสดง (optional)
+- `category`: หมวดหมู่ของเอกสาร (required)
+
+### ขั้นตอนที่ 3: อัพเดท Navigation Config
+
+แก้ไขไฟล์ `docs-config.json`:
+
+```json
+{
+  "navigation": [
+    {
+      "title": "My Section",
+      "slug": "my-section",
+      "items": [
+        {
+          "title": "My Page",
+          "slug": "my-section/my-page"
+        }
+      ]
+    }
+  ]
+}
+```
+
+### ขั้นตอนที่ 4: ตรวจสอบผลลัพธ์
+
+เปิดเบราว์เซอร์ที่:
+```
+http://localhost:4321/docs/my-section/my-page
+```
+
+เอกสารใหม่จะปรากฏใน Sidebar อัตโนมัติ! ✨
+
+## การเขียน MDX
+
+### Markdown พื้นฐาน
+
+```markdown
+# Heading 1
+## Heading 2
+### Heading 3
+
+**ข้อความตัวหนา**
+*ข้อความตัวเอียง*
+
+- รายการ 1
+- รายการ 2
+- รายการ 3
+
+1. ลำดับที่ 1
+2. ลำดับที่ 2
+
+[Link Text](https://example.com)
+
+![Alt Text](image.jpg)
+```
+
+### Code Blocks
+
+แสดง Code พร้อม Syntax Highlighting:
+
+````markdown
+```javascript
+function hello() {
+  console.log("Hello World!");
+}
+```
+
+```python
+def hello():
+    print("Hello World!")
+```
+
+```bash
+npm install
+npm run dev
+```
+````
+
+### Tables
+
+```markdown
+| Header 1 | Header 2 | Header 3 |
+|----------|----------|----------|
+| Row 1    | Data     | Data     |
+| Row 2    | Data     | Data     |
+```
+
+### Inline Code
+
+ใช้ backticks: `const x = 10;`
+
+### Blockquotes
+
+```markdown
+> This is a blockquote
+> Multiple lines are supported
+```
+
+## โครงสร้าง Navigation Config
+
+### รูปแบบ JSON
+
+```json
+{
+  "navigation": [
+    {
+      "title": "Section Title",
+      "slug": "section-slug",
+      "items": [
+        {
+          "title": "Page Title",
+          "slug": "section-slug/page-slug"
+        }
+      ]
+    }
+  ]
+}
+```
+
+### ตัวอย่างการจัดกลุ่ม
+
+```json
+{
+  "navigation": [
+    {
+      "title": "Getting Started",
+      "slug": "getting-started",
+      "items": [
+        {
+          "title": "Quick Start",
+          "slug": "getting-started/quick-start"
+        },
+        {
+          "title": "Installation",
+          "slug": "getting-started/installation"
+        }
+      ]
+    },
+    {
+      "title": "Advanced",
+      "slug": "advanced",
+      "items": [
+        {
+          "title": "Customization",
+          "slug": "advanced/customization"
+        },
+        {
+          "title": "Deployment",
+          "slug": "advanced/deployment"
+        }
+      ]
+    }
+  ]
+}
+```
+
+## Best Practices
+
+### การตั้งชื่อไฟล์
+
+- ใช้ lowercase และ kebab-case: `my-awesome-doc.mdx`
+- ใช้ชื่อที่สื่อความหมาย
+- หลีกเลี่ยงอักขระพิเศษ
+
+### การจัดโครงสร้าง
+
+```
+docs/
+├── getting-started/
+│   ├── introduction.mdx
+│   └── installation.mdx
+├── guides/
+│   ├── basic-usage.mdx
+│   └── advanced-usage.mdx
+└── api/
+    ├── authentication.mdx
+    └── endpoints.mdx
+```
+
+### การเขียนเนื้อหา
+
+1. **ใช้ Headings อย่างเหมาะสม**
+   - H1 (`#`) สำหรับชื่อหลัก (1 ครั้งต่อหน้า)
+   - H2 (`##`) สำหรับหัวข้อใหญ่
+   - H3 (`###`) สำหรับหัวข้อย่อย
+
+2. **เพิ่ม Table of Contents**
+   - TOC จะ generate อัตโนมัติจาก H2 และ H3
+   - ใช้ headings ที่ชัดเจนและสั้นกระชับ
+
+3. **Code Examples**
+   - ระบุภาษาใน code blocks
+   - เพิ่ม comments อธิบายโค้ด
+   - ให้ตัวอย่างที่สมบูรณ์
+
+## การลบเอกสาร
+
+### ลบไฟล์
+
+```bash
+rm src/content/docs/section/page.mdx
+```
+
+### ลบจาก Navigation
+
+ลบ entry ออกจาก `docs-config.json`:
+
+```json
+{
+  "items": [
+    // ลบ object นี้ออก
+    // {
+    //   "title": "Old Page",
+    //   "slug": "section/old-page"
+    // }
+  ]
+}
+```
+
+## การเรียงลำดับเอกสาร
+
+### ใช้ Field `order`
+
+```markdown
+---
+title: "First Page"
+order: 1
+---
+```
+
+```markdown
+---
+title: "Second Page"
+order: 2
+---
+```
+
+### เรียงใน Navigation Config
+
+ลำดับใน `docs-config.json` จะเป็นลำดับที่แสดงใน Sidebar
+
+## Tips & Tricks
+
+### ค้นหาเอกสาร
+
+ใช้ text editor search (VS Code: `Cmd/Ctrl + Shift + F`)
+
+### Preview ระหว่างเขียน
+
+Dev server จะ auto-reload เมื่อบันทึกไฟล์
+
+### ตรวจสอบ Broken Links
+
+```bash
+npm run build
+```
+
+Build process จะแจ้งเตือนถ้ามี broken links
+
+### Backup Config
+
+สำรอง `docs-config.json` ก่อนแก้ไขครั้งใหญ่:
+
+```bash
+cp docs-config.json docs-config.json.backup
+```
+
+## ตัวอย่างเอกสารที่สมบูรณ์
+
+```markdown
+---
+title: "Complete Example"
+description: "ตัวอย่างเอกสารที่มีทุกองค์ประกอบ"
+order: 1
+category: "examples"
+---
+
+# Complete Example
+
+คำอธิบายสั้นๆ เกี่ยวกับหัวข้อนี้
+
+## Introduction
+
+รายละเอียดเบื้องต้น...
+
+## Installation
+
+\`\`\`bash
+npm install example-package
+\`\`\`
+
+## Usage
+
+ตัวอย่างการใช้งาน:
+
+\`\`\`javascript
+import Example from 'example-package';
+
+const instance = new Example();
+instance.run();
+\`\`\`
+
+## Configuration
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `debug` | boolean | false | Enable debug mode |
+| `timeout` | number | 3000 | Request timeout |
+
+## Best Practices
+
+1. ทำสิ่งนี้
+2. หลีกเลี่ยงสิ่งนี้
+3. พิจารณาสิ่งนี้
+
+## Next Steps
+
+- อ่าน [Advanced Guide](./advanced)
+- ดูตัวอย่างเพิ่มเติมที่ [Examples](./examples)
+```
+
+## การ Deploy
+
+เมื่อพร้อม deploy:
+
+```bash
+npm run build
+```
+
+ไฟล์ที่ build แล้วจะอยู่ใน `dist/` folder
+
+### Platforms แนะนำ
+
+- **Vercel** - Deploy ง่าย มี CDN
+- **Netlify** - มี CI/CD
+- **GitHub Pages** - ฟรีสำหรับ public repos
+- **Cloudflare Pages** - เร็วและฟรี
+
+## สรุป
+
+การเพิ่มเอกสารใหม่:
+1. ✅ สร้างไฟล์ MDX ใน `src/content/docs/`
+2. ✅ เขียน frontmatter และเนื้อหา
+3. ✅ อัพเดท `docs-config.json`
+4. ✅ ตรวจสอบผลลัพธ์
+
+ง่ายมากเพียง 4 ขั้นตอน! 🚀
