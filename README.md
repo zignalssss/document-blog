@@ -62,41 +62,104 @@ npm run preview
 
 ## 📝 การเพิ่มเอกสารใหม่
 
-### ขั้นตอนที่ 1: สร้าง MDX File ใน \`src/content/docs/\`
+### ขั้นตอนที่ 1: สร้างโฟลเดอร์และไฟล์ MDX ใน `src/content/docs/`
 
-\`\`\`markdown
+สร้างโฟลเดอร์ category และไฟล์ `.mdx` ภายใน:
+
+```
+src/content/docs/
+├── docs-config.json          # ไฟล์ config navigation
+└── your-category/            # โฟลเดอร์ category
+    ├── page-one.mdx
+    └── page-two.mdx
+```
+
+**ตัวอย่างไฟล์ MDX:**
+
+```mdx
 ---
 title: "ชื่อเอกสาร"
 description: "คำอธิบายสั้นๆ"
 order: 1
-category: "category-name"
+category: "your-category"
 ---
 
 # ชื่อหัวข้อ
 
 เนื้อหาเอกสาร...
+
+## หัวข้อย่อย
+
+- รายการ 1
+- รายการ 2
+
+### Code Example
+
+\`\`\`javascript
+console.log("Hello World");
 \`\`\`
+```
 
-### ขั้นตอนที่ 2: อัพเดท \`docs-config.json\`
+### ขั้นตอนที่ 2: อัพเดท `src/content/docs/docs-config.json`
 
-\`\`\`json
+เพิ่ม section และ items ใน navigation:
+
+```json
 {
   "navigation": [
     {
-      "title": "New Section",
-      "slug": "new-section",
+      "title": "ชื่อ Section",
+      "slug": "your-category",
       "items": [
         {
-          "title": "New Page",
-          "slug": "new-section/new-page"
+          "title": "ชื่อหน้าแรก",
+          "slug": "your-category/page-one"
+        },
+        {
+          "title": "ชื่อหน้าสอง",
+          "slug": "your-category/page-two"
         }
       ]
     }
   ]
 }
-\`\`\`
+```
+
+**หมายเหตุ:**
+- `slug` ใน section ต้องตรงกับชื่อโฟลเดอร์
+- `slug` ใน items ต้องเป็น path ไปยังไฟล์ (ไม่ต้องใส่ `.mdx`)
 
 ระบบจะอัพเดท Sidebar อัตโนมัติ! 🎉
+
+### ตัวอย่างการเพิ่ม Project ใหม่
+
+หากต้องการเพิ่ม documentation project ใหม่ (เช่น Python, Go):
+
+1. **เพิ่มใน `projects-config.json`:**
+
+```json
+{
+  "projects": [
+    {
+      "id": "python",
+      "title": "Python Documentation",
+      "description": "เอกสารภาษา Python",
+      "icon": "🐍",
+      "color": "#3776AB"
+    }
+  ]
+}
+```
+
+2. **สร้างโฟลเดอร์ใน `src/content/`:**
+
+```
+src/content/python/
+├── docs-config.json
+└── getting-started/
+    ├── introduction.mdx
+    └── installation.mdx
+```
 
 ## 🧞 Commands
 

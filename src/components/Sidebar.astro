@@ -10,20 +10,32 @@ const urlBase = baseUrl || '/docs';
 const isActive = (slug: string) => {
   return currentPath.includes(`${urlBase}/${slug}`) || currentPath.includes(`/${slug}`);
 };
+
+const isSectionActive = (section: NavSection) => {
+  return section.items.some(item => isActive(item.slug));
+};
 ---
 
 <aside class="sticky top-8 h-fit p-6 bg-slate-800 rounded-lg border border-slate-700">
   <div class="mb-6">
     {baseUrl && <a href="/" class="inline-block text-blue-400 no-underline text-base mb-4 hover:text-blue-300 transition-colors">← กลับหน้าหลัก</a>}
-    <h2 class="text-2xl font-bold text-slate-50 mb-6">{title}</h2>
+    <h2 class="text-xl font-bold text-slate-50 mb-6">{title}</h2>
   </div>
   
   {navigation && navigation.length > 0 ? (
     <nav>
       {navigation.map((section: NavSection) => (
-        <div class="mb-6">
-          <h3 class="text-base font-semibold text-slate-400 uppercase tracking-wider mb-2">{section.title}</h3>
-          <ul class="list-none p-0 m-0">
+        <div class="mb-4 section-group" data-active={isSectionActive(section)}>
+          <button 
+            class="section-toggle w-full flex items-center justify-between text-base font-semibold text-slate-400 uppercase tracking-wider py-2 px-2 rounded-md hover:bg-slate-700 hover:text-slate-300 transition-all cursor-pointer bg-transparent border-none text-left"
+            aria-expanded={isSectionActive(section) ? "true" : "false"}
+          >
+            <span>{section.title}</span>
+            <svg class="chevron w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+          <ul class="section-items list-none p-0 m-0 overflow-hidden transition-all duration-200 pl-2">
             {section.items.map((item: NavItem) => (
               <li class="mb-1">
                 <a 
@@ -47,6 +59,24 @@ const isActive = (slug: string) => {
 </aside>
 
 <style>
+  .section-group[data-active="false"] .section-items {
+    max-height: 0;
+    opacity: 0;
+  }
+  
+  .section-group[data-active="true"] .section-items {
+    max-height: 500px;
+    opacity: 1;
+  }
+  
+  .section-group[data-active="true"] .chevron {
+    transform: rotate(180deg);
+  }
+  
+  .section-group[data-active="false"] .chevron {
+    transform: rotate(0deg);
+  }
+
   @media (max-width: 1024px) {
     aside {
       position: relative;
@@ -54,3 +84,20 @@ const isActive = (slug: string) => {
     }
   }
 </style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const toggles = document.querySelectorAll('.section-toggle');
+    
+    toggles.forEach(toggle => {
+      toggle.addEventListener('click', () => {
+        const group = toggle.closest('.section-group');
+        if (group) {
+          const isActive = group.getAttribute('data-active') === 'true';
+          group.setAttribute('data-active', (!isActive).toString());
+          toggle.setAttribute('aria-expanded', (!isActive).toString());
+        }
+      });
+    });
+  });
+</script>

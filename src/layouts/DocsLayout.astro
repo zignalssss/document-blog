@@ -49,10 +49,10 @@ const hasCustomSidebar = Astro.slots.has('sidebar');
 <style>
   .blog-layout {
     display: grid;
-    grid-template-columns: 280px 1fr 250px;
+    grid-template-columns: 280px 1fr 450px;
     width: 100%;
-    gap: 3rem;
-    padding: 3rem 2rem;
+    gap: 5rem;
+    padding: 2rem 1.5rem;
     min-height: 100vh;
   }
 
@@ -73,49 +73,49 @@ const hasCustomSidebar = Astro.slots.has('sidebar');
   }
 
   .article-header {
-    margin-bottom: 3rem;
-    padding-bottom: 2rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
   }
 
   .article-header h1 {
-    font-size: 3rem;
+    font-size: 2.5rem;
     font-weight: 700;
-    margin: 0 0 1rem 0;
+    margin: 0 0 0.5rem 0;
     line-height: 1.2;
     color: #f8fafc;
     letter-spacing: -0.02em;
   }
 
   .article-header .description {
-    font-size: 1.25rem;
+    font-size: 1.1rem;
     color: #94a3b8;
     margin: 0;
-    line-height: 1.6;
+    line-height: 1.5;
   }
 
   .content {
-    font-size: 1.0625rem;
-    line-height: 1.9;
+    font-size: 1rem;
+    line-height: 1.7;
     color: #cbd5e1;
   }
 
   .content :global(h2) {
-    font-size: 2rem;
+    font-size: 1.5rem;
     font-weight: 700;
-    margin: 3.5rem 0 1.5rem 0;
+    margin: 2rem 0 0.75rem 0;
     color: #f1f5f9;
     letter-spacing: -0.01em;
   }
 
   .content :global(h3) {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     font-weight: 600;
-    margin: 2.5rem 0 1.25rem 0;
+    margin: 1.5rem 0 0.5rem 0;
     color: #e2e8f0;
   }
 
   .content :global(p) {
-    margin: 0 0 1.5rem 0;
+    margin: 0 0 0.75rem 0;
     color: #cbd5e1;
   }
 
@@ -125,8 +125,8 @@ const hasCustomSidebar = Astro.slots.has('sidebar');
   }
 
   .content :global(pre) {
-    margin: 2rem 0;
-    padding: 1.5rem;
+    margin: 1rem 0;
+    padding: 1rem;
     background: #1e293b;
     border-radius: 0.5rem;
     overflow-x: auto;
