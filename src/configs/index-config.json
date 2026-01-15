@@ -1,0 +1,18 @@
+{
+  "hero": {
+    "title": "Documentation Hub",
+    "description": "เลือก Content ที่ต้องการเรียนรู้"
+  },
+  "projects": [
+    {
+      "id": "docs",
+      "title": "Project Documentation",
+      "description": "เอกสารโครงสร้างและการใช้งานระบบ",
+      "icon": "📚",
+      "color": "#8B5CF6"
+    }
+  ],
+  "footer": {
+    "text": "เลือก documentation ที่ต้องการด้านบน"
+  }
+}

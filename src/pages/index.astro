@@ -1,8 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import projectsConfig from '../../projects-config.json';
+import indexConfig from '../configs/index-config.json';
 
-const { projects } = projectsConfig;
+const { hero, projects, footer } = indexConfig;
 
 // สำหรับแต่ละ project, หาหน้าแรก
 const projectLinks = await Promise.all(projects.map(async (project) => {
@@ -24,11 +24,11 @@ const projectLinks = await Promise.all(projects.map(async (project) => {
 }));
 ---
 
-<Layout title="Documentation Hub">
+<Layout title={hero.title}>
   <div class="min-h-screen bg-slate-925 py-16 px-8">
     <header class="text-center mb-16">
-      <h1 class="text-6xl font-bold text-slate-50 mb-4">Documentation Hub</h1>
-      <p class="text-2xl text-slate-400">เลือก Content ที่ต้องการเรียนรู้</p>
+      <h1 class="text-6xl font-bold text-slate-50 mb-4">{hero.title}</h1>
+      <p class="text-2xl text-slate-400">{hero.description}</p>
     </header>
 
     <div class="max-w-6xl mx-auto grid grid-cols-[repeat(auto-fit,minmax(350px,1fr))] gap-8 mb-16">
@@ -53,7 +53,7 @@ const projectLinks = await Promise.all(projects.map(async (project) => {
     </div>
 
     <footer class="text-center text-slate-500 text-base">
-      <p>เลือก documentation ที่ต้องการด้านบน</p>
+      <p>{footer.text}</p>
     </footer>
   </div>
 </Layout>

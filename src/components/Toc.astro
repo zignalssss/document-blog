@@ -13,14 +13,18 @@ const toc = headings.filter((h) => h.depth <= 3);
   <aside class="sticky top-8 h-fit p-4">
     <h4 class="text-base font-semibold text-slate-50 mb-4">On this page</h4>
     <nav>
-      <ul class="list-none pl-4 m-0 border-l-2 border-slate-700">
+      <ul class="toc-list list-none pl-4 m-0 border-l-2 border-slate-700">
         {toc.map((heading) => (
           <li class:list={[
             'mb-2',
             heading.depth === 2 && 'pl-3',
             heading.depth === 3 && 'pl-6'
           ]}>
-            <a href={`#${heading.slug}`} class="block text-slate-400 no-underline transition-colors hover:text-blue-400 text-base">
+            <a 
+              href={`#${heading.slug}`} 
+              data-slug={heading.slug}
+              class="toc-link block text-slate-400 no-underline transition-colors hover:text-blue-400 text-base"
+            >
               {heading.text}
             </a>
           </li>
@@ -31,9 +35,58 @@ const toc = headings.filter((h) => h.depth <= 3);
 )}
 
 <style>
+  .toc-link.active {
+    color: #60a5fa;
+    font-weight: 500;
+  }
+  
   @media (max-width: 1024px) {
     aside {
       display: none;
     }
   }
 </style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const tocLinks = document.querySelectorAll('.toc-link');
+    const headings = document.querySelectorAll('h2[id], h3[id]');
+    
+    if (headings.length === 0 || tocLinks.length === 0) return;
+
+    const observerOptions = {
+      rootMargin: '-80px 0px -70% 0px',
+      threshold: 0
+    };
+
+    let currentActive: Element | null = null;
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute('id');
+          
+          // Remove active from previous
+          if (currentActive) {
+            currentActive.classList.remove('active');
+          }
+          
+          // Add active to current
+          const activeLink = document.querySelector(`.toc-link[data-slug="${id}"]`);
+          if (activeLink) {
+            activeLink.classList.add('active');
+            currentActive = activeLink;
+          }
+        }
+      });
+    }, observerOptions);
+
+    headings.forEach((heading) => observer.observe(heading));
+
+    // Set first item as active initially
+    if (tocLinks.length > 0) {
+      tocLinks[0].classList.add('active');
+      currentActive = tocLinks[0];
+    }
+  });
+</script>

@@ -11,39 +11,45 @@ category: "project-guide"
 
 ## ภาพรวมการทำงาน
 
-Documentation Site นี้ใช้ระบบ **Dynamic Navigation** ที่อิงจากไฟล์ `docs-config.json` ทำให้คุณสามารถเพิ่มหรือลบเอกสารได้ง่ายๆ โดยไม่ต้องแก้ไขโค้ดหลัก
+Documentation Site นี้ใช้ระบบ **Multi-Project Documentation** ที่รองรับหลาย project โดยแต่ละ project มี navigation แยกกัน
 
-## การเพิ่มเอกสารใหม่
+### โครงสร้างหลัก
 
-### ขั้นตอนที่ 1: สร้างโฟลเดอร์และไฟล์ MDX
-
-สร้างโฟลเดอร์ใหม่ใน `src/content/docs/`:
-
-```bash
-mkdir src/content/docs/my-section
+```
+document-blog/
+├── projects-config.json          # กำหนด projects ทั้งหมด
+├── src/
+│   └── content/
+│       └── [project-id]/         # โฟลเดอร์ของแต่ละ project
+│           ├── docs-config.json  # navigation ของ project นั้น
+│           └── [section]/        # โฟลเดอร์ section
+│               └── page.mdx      # ไฟล์เอกสาร
 ```
 
-สร้างไฟล์ MDX:
+## การเพิ่มเอกสารใหม่ใน Project ที่มีอยู่
+
+### ขั้นตอนที่ 1: สร้างไฟล์ MDX
+
+สร้างไฟล์ `.mdx` ใน `src/content/[project-id]/[section]/`:
 
 ```bash
-touch src/content/docs/my-section/my-page.mdx
+# ตัวอย่าง: เพิ่มหน้าใหม่ใน docs project
+touch src/content/docs/project-guide/new-page.mdx
 ```
 
-### ขั้นตอนที่ 2: เขียน Frontmatter
+### ขั้นตอนที่ 2: เขียน Frontmatter และเนื้อหา
 
-เปิดไฟล์ที่สร้างและเพิ่ม frontmatter:
-
-```markdown
+```mdx
 ---
 title: "ชื่อเอกสาร"
-description: "คำอธิบายสั้นๆ เกี่ยวกับเอกสารนี้"
+description: "คำอธิบายสั้นๆ"
 order: 1
-category: "my-section"
+category: "project-guide"
 ---
 
 # ชื่อหัวข้อหลัก
 
-เนื้อหาเอกสารของคุณ...
+เนื้อหาเอกสาร...
 
 ## หัวข้อย่อย
 
@@ -51,25 +57,31 @@ category: "my-section"
 ```
 
 **Frontmatter Fields:**
-- `title`: ชื่อที่แสดงบนหน้าเอกสาร (required)
-- `description`: คำอธิบายสั้นๆ (required)
-- `order`: ลำดับการแสดง (optional)
-- `category`: หมวดหมู่ของเอกสาร (required)
+| Field | Required | Description |
+|-------|----------|-------------|
+| `title` | ✅ | ชื่อที่แสดงบนหน้าเอกสาร |
+| `description` | ✅ | คำอธิบายสั้นๆ |
+| `category` | ✅ | หมวดหมู่ (ชื่อ section) |
+| `order` | ❌ | ลำดับการแสดง |
 
 ### ขั้นตอนที่ 3: อัพเดท Navigation Config
 
-แก้ไขไฟล์ `docs-config.json`:
+แก้ไขไฟล์ `src/content/[project-id]/docs-config.json`:
 
 ```json
 {
   "navigation": [
     {
-      "title": "My Section",
-      "slug": "my-section",
+      "title": "Project Guide",
+      "slug": "project-guide",
       "items": [
         {
-          "title": "My Page",
-          "slug": "my-section/my-page"
+          "title": "Setup Guide",
+          "slug": "project-guide/setup"
+        },
+        {
+          "title": "New Page",
+          "slug": "project-guide/new-page"
         }
       ]
     }
@@ -77,14 +89,153 @@ category: "my-section"
 }
 ```
 
+**สำคัญ:**
+- `slug` ใน section ต้องตรงกับชื่อโฟลเดอร์
+- `slug` ใน items ต้องเป็น path: `[folder]/[filename]` (ไม่ต้องใส่ `.mdx`)
+
 ### ขั้นตอนที่ 4: ตรวจสอบผลลัพธ์
 
-เปิดเบราว์เซอร์ที่:
 ```
-http://localhost:4321/docs/my-section/my-page
+http://localhost:4321/[project-id]/[section]/[page]
 ```
 
-เอกสารใหม่จะปรากฏใน Sidebar อัตโนมัติ! ✨
+ตัวอย่าง: `http://localhost:4321/docs/project-guide/new-page`
+
+## การเพิ่ม Section ใหม่
+
+### ขั้นตอนที่ 1: สร้างโฟลเดอร์ Section
+
+```bash
+mkdir src/content/docs/new-section
+```
+
+### ขั้นตอนที่ 2: สร้างไฟล์ MDX
+
+```bash
+touch src/content/docs/new-section/first-page.mdx
+touch src/content/docs/new-section/second-page.mdx
+```
+
+### ขั้นตอนที่ 3: อัพเดท Navigation
+
+เพิ่ม section ใหม่ใน `src/content/docs/docs-config.json`:
+
+```json
+{
+  "navigation": [
+    {
+      "title": "Project Guide",
+      "slug": "project-guide",
+      "items": [...]
+    },
+    {
+      "title": "New Section",
+      "slug": "new-section",
+      "items": [
+        {
+          "title": "First Page",
+          "slug": "new-section/first-page"
+        },
+        {
+          "title": "Second Page",
+          "slug": "new-section/second-page"
+        }
+      ]
+    }
+  ]
+}
+```
+
+## การเพิ่ม Project ใหม่
+
+### ขั้นตอนที่ 1: เพิ่มใน `projects-config.json`
+
+```json
+{
+  "projects": [
+    {
+      "id": "docs",
+      "title": "Project Documentation",
+      "description": "เอกสารโครงสร้างและการใช้งานระบบ",
+      "icon": "📚",
+      "color": "#8B5CF6"
+    },
+    {
+      "id": "python",
+      "title": "Python Documentation",
+      "description": "เอกสารภาษา Python",
+      "icon": "🐍",
+      "color": "#3776AB"
+    }
+  ]
+}
+```
+
+**Fields:**
+| Field | Description |
+|-------|-------------|
+| `id` | ID ของ project (ใช้เป็น URL path) |
+| `title` | ชื่อที่แสดงใน sidebar |
+| `description` | คำอธิบาย project |
+| `icon` | Emoji icon |
+| `color` | สีของ project |
+
+### ขั้นตอนที่ 2: สร้างโครงสร้างโฟลเดอร์
+
+```bash
+# สร้างโฟลเดอร์ project
+mkdir -p src/content/python/getting-started
+
+# สร้างไฟล์ config
+touch src/content/python/docs-config.json
+
+# สร้างไฟล์เอกสาร
+touch src/content/python/getting-started/introduction.mdx
+```
+
+### ขั้นตอนที่ 3: สร้าง docs-config.json
+
+สร้างไฟล์ `src/content/python/docs-config.json`:
+
+```json
+{
+  "navigation": [
+    {
+      "title": "Getting Started",
+      "slug": "getting-started",
+      "items": [
+        {
+          "title": "Introduction",
+          "slug": "getting-started/introduction"
+        }
+      ]
+    }
+  ]
+}
+```
+
+### ขั้นตอนที่ 4: เขียนเอกสาร
+
+สร้างไฟล์ `src/content/python/getting-started/introduction.mdx`:
+
+```mdx
+---
+title: "Introduction to Python"
+description: "แนะนำภาษา Python"
+order: 1
+category: "getting-started"
+---
+
+# Introduction to Python
+
+เนื้อหา...
+```
+
+### ขั้นตอนที่ 5: เข้าถึง Project ใหม่
+
+```
+http://localhost:4321/python/getting-started/introduction
+```
 
 ## การเขียน MDX
 
@@ -95,39 +246,29 @@ http://localhost:4321/docs/my-section/my-page
 ## Heading 2
 ### Heading 3
 
-**ข้อความตัวหนา**
-*ข้อความตัวเอียง*
+**ตัวหนา** และ *ตัวเอียง*
 
 - รายการ 1
 - รายการ 2
-- รายการ 3
 
-1. ลำดับที่ 1
-2. ลำดับที่ 2
+1. ลำดับ 1
+2. ลำดับ 2
 
-[Link Text](https://example.com)
-
-![Alt Text](image.jpg)
+[Link](https://example.com)
 ```
 
 ### Code Blocks
 
-แสดง Code พร้อม Syntax Highlighting:
-
 ````markdown
 ```javascript
-function hello() {
-  console.log("Hello World!");
-}
+console.log("Hello World!");
 ```
 
 ```python
-def hello():
-    print("Hello World!")
+print("Hello World!")
 ```
 
 ```bash
-npm install
 npm run dev
 ```
 ````
@@ -135,269 +276,38 @@ npm run dev
 ### Tables
 
 ```markdown
-| Header 1 | Header 2 | Header 3 |
-|----------|----------|----------|
-| Row 1    | Data     | Data     |
-| Row 2    | Data     | Data     |
+| Header 1 | Header 2 |
+|----------|----------|
+| Data 1   | Data 2   |
 ```
 
 ### Inline Code
 
 ใช้ backticks: `const x = 10;`
 
-### Blockquotes
-
-```markdown
-> This is a blockquote
-> Multiple lines are supported
-```
-
-## โครงสร้าง Navigation Config
-
-### รูปแบบ JSON
-
-```json
-{
-  "navigation": [
-    {
-      "title": "Section Title",
-      "slug": "section-slug",
-      "items": [
-        {
-          "title": "Page Title",
-          "slug": "section-slug/page-slug"
-        }
-      ]
-    }
-  ]
-}
-```
-
-### ตัวอย่างการจัดกลุ่ม
-
-```json
-{
-  "navigation": [
-    {
-      "title": "Getting Started",
-      "slug": "getting-started",
-      "items": [
-        {
-          "title": "Quick Start",
-          "slug": "getting-started/quick-start"
-        },
-        {
-          "title": "Installation",
-          "slug": "getting-started/installation"
-        }
-      ]
-    },
-    {
-      "title": "Advanced",
-      "slug": "advanced",
-      "items": [
-        {
-          "title": "Customization",
-          "slug": "advanced/customization"
-        },
-        {
-          "title": "Deployment",
-          "slug": "advanced/deployment"
-        }
-      ]
-    }
-  ]
-}
-```
-
-## Best Practices
-
-### การตั้งชื่อไฟล์
-
-- ใช้ lowercase และ kebab-case: `my-awesome-doc.mdx`
-- ใช้ชื่อที่สื่อความหมาย
-- หลีกเลี่ยงอักขระพิเศษ
-
-### การจัดโครงสร้าง
-
-```
-docs/
-├── getting-started/
-│   ├── introduction.mdx
-│   └── installation.mdx
-├── guides/
-│   ├── basic-usage.mdx
-│   └── advanced-usage.mdx
-└── api/
-    ├── authentication.mdx
-    └── endpoints.mdx
-```
-
-### การเขียนเนื้อหา
-
-1. **ใช้ Headings อย่างเหมาะสม**
-   - H1 (`#`) สำหรับชื่อหลัก (1 ครั้งต่อหน้า)
-   - H2 (`##`) สำหรับหัวข้อใหญ่
-   - H3 (`###`) สำหรับหัวข้อย่อย
-
-2. **เพิ่ม Table of Contents**
-   - TOC จะ generate อัตโนมัติจาก H2 และ H3
-   - ใช้ headings ที่ชัดเจนและสั้นกระชับ
-
-3. **Code Examples**
-   - ระบุภาษาใน code blocks
-   - เพิ่ม comments อธิบายโค้ด
-   - ให้ตัวอย่างที่สมบูรณ์
-
 ## การลบเอกสาร
 
-### ลบไฟล์
+### ลบหน้าเดียว
 
-```bash
-rm src/content/docs/section/page.mdx
-```
+1. ลบไฟล์ `.mdx`
+2. ลบ entry ออกจาก `docs-config.json`
 
-### ลบจาก Navigation
+### ลบ Section
 
-ลบ entry ออกจาก `docs-config.json`:
+1. ลบโฟลเดอร์ section ทั้งหมด
+2. ลบ section ออกจาก `docs-config.json`
 
-```json
-{
-  "items": [
-    // ลบ object นี้ออก
-    // {
-    //   "title": "Old Page",
-    //   "slug": "section/old-page"
-    // }
-  ]
-}
-```
+### ลบ Project
 
-## การเรียงลำดับเอกสาร
-
-### ใช้ Field `order`
-
-```markdown
----
-title: "First Page"
-order: 1
----
-```
-
-```markdown
----
-title: "Second Page"
-order: 2
----
-```
-
-### เรียงใน Navigation Config
-
-ลำดับใน `docs-config.json` จะเป็นลำดับที่แสดงใน Sidebar
-
-## Tips & Tricks
-
-### ค้นหาเอกสาร
-
-ใช้ text editor search (VS Code: `Cmd/Ctrl + Shift + F`)
-
-### Preview ระหว่างเขียน
-
-Dev server จะ auto-reload เมื่อบันทึกไฟล์
-
-### ตรวจสอบ Broken Links
-
-```bash
-npm run build
-```
-
-Build process จะแจ้งเตือนถ้ามี broken links
-
-### Backup Config
-
-สำรอง `docs-config.json` ก่อนแก้ไขครั้งใหญ่:
-
-```bash
-cp docs-config.json docs-config.json.backup
-```
-
-## ตัวอย่างเอกสารที่สมบูรณ์
-
-```markdown
----
-title: "Complete Example"
-description: "ตัวอย่างเอกสารที่มีทุกองค์ประกอบ"
-order: 1
-category: "examples"
----
-
-# Complete Example
-
-คำอธิบายสั้นๆ เกี่ยวกับหัวข้อนี้
-
-## Introduction
-
-รายละเอียดเบื้องต้น...
-
-## Installation
-
-\`\`\`bash
-npm install example-package
-\`\`\`
-
-## Usage
-
-ตัวอย่างการใช้งาน:
-
-\`\`\`javascript
-import Example from 'example-package';
-
-const instance = new Example();
-instance.run();
-\`\`\`
-
-## Configuration
-
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `debug` | boolean | false | Enable debug mode |
-| `timeout` | number | 3000 | Request timeout |
-
-## Best Practices
-
-1. ทำสิ่งนี้
-2. หลีกเลี่ยงสิ่งนี้
-3. พิจารณาสิ่งนี้
-
-## Next Steps
-
-- อ่าน [Advanced Guide](./advanced)
-- ดูตัวอย่างเพิ่มเติมที่ [Examples](./examples)
-```
-
-## การ Deploy
-
-เมื่อพร้อม deploy:
-
-```bash
-npm run build
-```
-
-ไฟล์ที่ build แล้วจะอยู่ใน `dist/` folder
-
-### Platforms แนะนำ
-
-- **Vercel** - Deploy ง่าย มี CDN
-- **Netlify** - มี CI/CD
-- **GitHub Pages** - ฟรีสำหรับ public repos
-- **Cloudflare Pages** - เร็วและฟรี
+1. ลบโฟลเดอร์ project ใน `src/content/`
+2. ลบ entry ออกจาก `projects-config.json`
 
 ## สรุป
 
-การเพิ่มเอกสารใหม่:
-1. ✅ สร้างไฟล์ MDX ใน `src/content/docs/`
-2. ✅ เขียน frontmatter และเนื้อหา
-3. ✅ อัพเดท `docs-config.json`
-4. ✅ ตรวจสอบผลลัพธ์
+| ต้องการ | ไฟล์ที่ต้องแก้ |
+|---------|---------------|
+| เพิ่มหน้าใหม่ | สร้าง `.mdx` + แก้ `docs-config.json` |
+| เพิ่ม section | สร้างโฟลเดอร์ + `.mdx` + แก้ `docs-config.json` |
+| เพิ่ม project | แก้ `projects-config.json` + สร้างโฟลเดอร์ + `docs-config.json` + `.mdx` |
 
-ง่ายมากเพียง 4 ขั้นตอน! 🚀
+ง่ายมาก! 🚀
