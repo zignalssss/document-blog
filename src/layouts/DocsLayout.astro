@@ -2,11 +2,41 @@
 import Layout from './Layout.astro';
 import Sidebar from '../components/Sidebar.astro';
 import Toc from '../components/Toc.astro';
-import type { DocsLayoutProps } from '../types';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import type { DocsLayoutProps, BreadcrumbItem } from '../types';
 
 type Props = DocsLayoutProps;
 
 const { title, description, headings, navigation, currentPath, projectTitle, baseUrl } = Astro.props;
+
+// สร้าง breadcrumb items จาก current path
+const pathParts = (currentPath || Astro.url.pathname).split('/').filter(Boolean);
+const breadcrumbItems: BreadcrumbItem[] = [];
+
+if (projectTitle && baseUrl) {
+  breadcrumbItems.push({
+    label: projectTitle.replace(/^[^\s]+\s/, ''), // ลบ emoji
+    href: baseUrl
+  });
+}
+
+// หา section และ page title จาก navigation
+if (navigation && pathParts.length >= 2) {
+  const currentSlug = pathParts.slice(1).join('/');
+  for (const section of navigation) {
+    const foundItem = section.items.find(item => item.slug === currentSlug);
+    if (foundItem) {
+      breadcrumbItems.push({
+        label: section.title,
+        href: undefined
+      });
+      breadcrumbItems.push({
+        label: foundItem.title
+      });
+      break;
+    }
+  }
+}
 const hasCustomSidebar = Astro.slots.has('sidebar');
 ---
 
@@ -29,6 +59,9 @@ const hasCustomSidebar = Astro.slots.has('sidebar');
 
     <main class="blog-content">
       <article>
+        {breadcrumbItems.length > 0 && (
+          <Breadcrumb items={breadcrumbItems} />
+        )}
         <header class="article-header">
           <h1>{title}</h1>
           <p class="description">{description}</p>

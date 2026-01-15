@@ -1,97 +1,100 @@
-# Documentation Site
+# Template Documentation Site
 
-เว็บไซต์สำหรับจัดการเอกสาร (Documentation) แบบ Dynamic ที่สามารถเพิ่ม Docs ใหม่ได้ง่ายผ่านการแก้ไข JSON config
+A dynamic documentation website that allows you to easily add new docs through JSON config editing.
 
 ## 🚀 Features
 
-- ✅ **Dynamic Navigation** - กำหนด structure ผ่าน `docs-config.json`
-- ✅ **MDX Support** - เขียน docs ด้วย Markdown + JSX components
-- ✅ **Content Collections** - Astro content collections สำหรับ type-safety
-- ✅ **Sidebar Navigation** - Sidebar แบบ auto-generate จาก config
-- ✅ **Table of Contents** - TOC แบบอัตโนมัติจาก headings
-- ✅ **Responsive Design** - รองรับทุกขนาดหน้าจอ
-- ✅ **Syntax Highlighting** - Code blocks พร้อม syntax highlighting
+- ✅ **Dynamic Navigation** - Define structure via `docs-config.json`
+- ✅ **MDX Support** - Write docs with Markdown + JSX components
+- ✅ **Content Collections** - Astro content collections for type-safety
+- ✅ **Sidebar Navigation** - Auto-generated sidebar from config
+- ✅ **Table of Contents** - Automatic TOC from headings
+- ✅ **Responsive Design** - Support all screen sizes
+- ✅ **Syntax Highlighting** - Code blocks with syntax highlighting
 
 ## 📁 Project Structure
 
 ```
 /
-├── docs-config.json          # กำหนด navigation และ structure
+├── projects-config.json      # Define all projects
 ├── src/
+│   ├── configs/
+│   │   └── index-config.json # Homepage configuration
 │   ├── content/
 │   │   ├── config.ts         # Content collections schema
-│   │   └── docs/             # เอกสารทั้งหมด (MDX files)
-│   │       ├── introduction/
-│   │       ├── setup/
-│   │       ├── architecture/
-│   │       └── api/
+│   │   └── [project-id]/     # Each project folder
+│   │       ├── docs-config.json  # Project navigation
+│   │       └── [section]/    # Section folders
+│   │           └── page.mdx  # Documentation files
 │   ├── layouts/
-│   │   └── DocsLayout.astro  # Layout สำหรับหน้า docs
+│   │   └── DocsLayout.astro  # Docs page layout
 │   ├── components/
 │   │   ├── Sidebar.astro     # Sidebar navigation
 │   │   ├── Toc.astro         # Table of contents
+│   │   ├── Breadcrumb.astro  # Breadcrumb navigation
 │   │   └── CodeBlock.astro   # Code block component
 │   └── pages/
-│       └── docs/
+│       ├── index.astro       # Homepage
+│       └── [project]/
 │           └── [...slug].astro  # Dynamic routing
 └── public/                   # Static assets
 ```
 
-## 🎯 วิธีใช้งาน
+## 🎯 Getting Started
 
-### 1. ติดตั้ง Dependencies
+### 1. Install Dependencies
 
-\`\`\`bash
+```bash
 npm install
-\`\`\`
+```
 
-### 2. เริ่ม Development Server
+### 2. Start Development Server
 
-\`\`\`bash
+```bash
 npm run dev
-\`\`\`
+```
 
-เปิดเบราว์เซอร์ที่ `http://localhost:4321/docs/introduction/overview`
+Open browser at `http://localhost:4321`
 
-### 3. Build สำหรับ Production
+### 3. Build for Production
 
-\`\`\`bash
+```bash
 npm run build
 npm run preview
-\`\`\`
+```
 
-## 📝 การเพิ่มเอกสารใหม่
+## 📝 Adding New Documentation
 
-### ขั้นตอนที่ 1: สร้างโฟลเดอร์และไฟล์ MDX ใน `src/content/docs/`
+### Step 1: Create MDX File
 
-สร้างโฟลเดอร์ category และไฟล์ `.mdx` ภายใน:
+Create folder and `.mdx` file in `src/content/[project-id]/`:
 
 ```
 src/content/docs/
-├── docs-config.json          # ไฟล์ config navigation
-└── your-category/            # โฟลเดอร์ category
+├── docs-config.json          # Navigation config file
+└── your-category/            # Category folder
     ├── page-one.mdx
     └── page-two.mdx
 ```
 
-**ตัวอย่างไฟล์ MDX:**
+**Example MDX File:**
 
 ```mdx
 ---
-title: "ชื่อเอกสาร"
-description: "คำอธิบายสั้นๆ"
+title: "Document Title"
+description: "Short description"
 order: 1
 category: "your-category"
 ---
 
-# ชื่อหัวข้อ
+# Main Heading
 
-เนื้อหาเอกสาร...
+Document content...
 
-## หัวข้อย่อย
+## Subheading
 
-- รายการ 1
-- รายการ 2
+- Item 1
+- Item 2
 
 ### Code Example
 
@@ -100,23 +103,23 @@ console.log("Hello World");
 \`\`\`
 ```
 
-### ขั้นตอนที่ 2: อัพเดท `src/content/docs/docs-config.json`
+### Step 2: Update `src/content/[project-id]/docs-config.json`
 
-เพิ่ม section และ items ใน navigation:
+Add section and items to navigation:
 
 ```json
 {
   "navigation": [
     {
-      "title": "ชื่อ Section",
+      "title": "Section Name",
       "slug": "your-category",
       "items": [
         {
-          "title": "ชื่อหน้าแรก",
+          "title": "First Page",
           "slug": "your-category/page-one"
         },
         {
-          "title": "ชื่อหน้าสอง",
+          "title": "Second Page",
           "slug": "your-category/page-two"
         }
       ]
@@ -125,17 +128,17 @@ console.log("Hello World");
 }
 ```
 
-**หมายเหตุ:**
-- `slug` ใน section ต้องตรงกับชื่อโฟลเดอร์
-- `slug` ใน items ต้องเป็น path ไปยังไฟล์ (ไม่ต้องใส่ `.mdx`)
+**Note:**
+- `slug` in section must match folder name
+- `slug` in items must be path to file (without `.mdx`)
 
-ระบบจะอัพเดท Sidebar อัตโนมัติ! 🎉
+Sidebar will update automatically! 🎉
 
-### ตัวอย่างการเพิ่ม Project ใหม่
+### Adding a New Project
 
-หากต้องการเพิ่ม documentation project ใหม่ (เช่น Python, Go):
+To add a new documentation project (e.g., Python, Go):
 
-1. **เพิ่มใน `projects-config.json`:**
+1. **Add to `projects-config.json`:**
 
 ```json
 {
@@ -143,7 +146,7 @@ console.log("Hello World");
     {
       "id": "python",
       "title": "Python Documentation",
-      "description": "เอกสารภาษา Python",
+      "description": "Python language documentation",
       "icon": "🐍",
       "color": "#3776AB"
     }
@@ -151,7 +154,7 @@ console.log("Hello World");
 }
 ```
 
-2. **สร้างโฟลเดอร์ใน `src/content/`:**
+2. **Create folder structure in `src/content/`:**
 
 ```
 src/content/python/
@@ -161,39 +164,56 @@ src/content/python/
     └── installation.mdx
 ```
 
+3. **Create `docs-config.json` for the project:**
+
+```json
+{
+  "navigation": [
+    {
+      "title": "Getting Started",
+      "slug": "getting-started",
+      "items": [
+        {
+          "title": "Introduction",
+          "slug": "getting-started/introduction"
+        }
+      ]
+    }
+  ]
+}
+```
+
 ## 🧞 Commands
 
 | Command | Action |
 | :-- | :-- |
-| \`npm install\` | ติดตั้ง dependencies |
-| \`npm run dev\` | เริ่ม dev server ที่ \`localhost:4321\` |
-| \`npm run build\` | Build production site ไปที่ \`./dist/\` |
-| \`npm run preview\` | Preview build ก่อน deploy |
+| `npm install` | Install dependencies |
+| `npm run dev` | Start dev server at `localhost:4321` |
+| `npm run build` | Build production site to `./dist/` |
+| `npm run preview` | Preview build before deploy |
 
-## 🎨 การ Customize
+## 🎨 Customization
 
-### แก้ไข Styles
+### Editing Styles
 
-แก้ไข CSS ใน components:
-- \`src/layouts/DocsLayout.astro\` - Layout หลัก
-- \`src/components/Sidebar.astro\` - Sidebar styles
-- \`src/components/Toc.astro\` - TOC styles
+Edit CSS in components:
+- `src/layouts/DocsLayout.astro` - Main layout
+- `src/components/Sidebar.astro` - Sidebar styles
+- `src/components/Toc.astro` - TOC styles
 
-### เพิ่ม Component ใหม่
+### Homepage Configuration
 
-สร้าง component ใน \`src/components/\` และใช้งานใน MDX files
+Edit `src/configs/index-config.json` to customize:
+- Hero title and description
+- Project cards
+- Footer text
 
-## 📖 เอกสารเพิ่มเติม
+### Adding New Components
+
+Create components in `src/components/` and use them in MDX files.
+
+## 📖 Additional Resources
 
 - [Astro Documentation](https://docs.astro.build)
 - [MDX Documentation](https://mdxjs.com)
 - [Content Collections](https://docs.astro.build/en/guides/content-collections/)
-
-## 💡 ตัวอย่างเอกสารที่มีอยู่
-
-- **Introduction**: Overview, Scope
-- **Setup**: Installation, Configuration
-- **Architecture**: System Design, Database Schema
-- **API**: Authentication API, Users API
-
-เปิดดูได้ที่ \`http://localhost:4321/docs/introduction/overview\` หลังจากรัน dev server
