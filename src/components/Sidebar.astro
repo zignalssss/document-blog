@@ -1,21 +1,7 @@
 ---
-interface NavItem {
-  title: string;
-  slug: string;
-}
+import type { SidebarProps, NavSection, NavItem } from '../types';
 
-interface NavSection {
-  title: string;
-  slug: string;
-  items: NavItem[];
-}
-
-interface Props {
-  currentPath: string;
-  navigation?: NavSection[];
-  projectTitle?: string;
-  baseUrl?: string;
-}
+type Props = SidebarProps;
 
 const { currentPath, navigation = [], projectTitle, baseUrl } = Astro.props;
 const title = projectTitle || 'Documentation';

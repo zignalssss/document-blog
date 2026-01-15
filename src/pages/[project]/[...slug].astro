@@ -2,6 +2,7 @@
 import DocsLayout from '../../layouts/DocsLayout.astro';
 import Sidebar from '../../components/Sidebar.astro';
 import projectsConfig from '../../../projects-config.json';
+import type { NavSection } from '../../types';
 
 export async function getStaticPaths() {
   const { projects } = projectsConfig;

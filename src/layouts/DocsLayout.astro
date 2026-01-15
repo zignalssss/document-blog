@@ -2,27 +2,9 @@
 import Layout from './Layout.astro';
 import Sidebar from '../components/Sidebar.astro';
 import Toc from '../components/Toc.astro';
+import type { DocsLayoutProps } from '../types';
 
-interface NavItem {
-  title: string;
-  slug: string;
-}
-
-interface NavSection {
-  title: string;
-  slug: string;
-  items: NavItem[];
-}
-
-interface Props {
-  title: string;
-  description: string;
-  headings: any[];
-  navigation?: NavSection[];
-  currentPath?: string;
-  projectTitle?: string;
-  baseUrl?: string;
-}
+type Props = DocsLayoutProps;
 
 const { title, description, headings, navigation, currentPath, projectTitle, baseUrl } = Astro.props;
 const hasCustomSidebar = Astro.slots.has('sidebar');
