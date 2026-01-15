@@ -9,6 +9,11 @@ export interface NavSection {
   items: NavItem[];
 }
 
+export interface BreadcrumbItem {
+  label: string;
+  href?: string;
+}
+
 export interface SidebarProps {
   currentPath: string;
   navigation?: NavSection[];
@@ -24,4 +29,5 @@ export interface DocsLayoutProps {
   currentPath?: string;
   projectTitle?: string;
   baseUrl?: string;
+  breadcrumb?: BreadcrumbItem[];
 }

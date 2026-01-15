@@ -50,8 +50,7 @@ const hasCustomSidebar = Astro.slots.has('sidebar');
   .blog-layout {
     display: grid;
     grid-template-columns: 280px 1fr 250px;
-    max-width: 1600px;
-    margin: 0 auto;
+    width: 100%;
     gap: 3rem;
     padding: 3rem 2rem;
     min-height: 100vh;
@@ -64,8 +63,6 @@ const hasCustomSidebar = Astro.slots.has('sidebar');
   }
 
   .blog-content {
-    max-width: 800px;
-    margin: 0 auto;
     width: 100%;
   }
 
@@ -78,7 +75,6 @@ const hasCustomSidebar = Astro.slots.has('sidebar');
   .article-header {
     margin-bottom: 3rem;
     padding-bottom: 2rem;
-    border-bottom: 2px solid rgba(51, 65, 85, 0.5);
   }
 
   .article-header h1 {
@@ -108,8 +104,6 @@ const hasCustomSidebar = Astro.slots.has('sidebar');
     font-weight: 700;
     margin: 3.5rem 0 1.5rem 0;
     color: #f1f5f9;
-    padding-bottom: 0.75rem;
-    border-bottom: 1px solid #334155;
     letter-spacing: -0.01em;
   }
 
