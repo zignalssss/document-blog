@@ -41,6 +41,66 @@ const hasCustomSidebar = Astro.slots.has('sidebar');
 ---
 
 <Layout title={title}>
+  <!-- Mobile Navbar -->
+  <header class="mobile-navbar">
+    <button id="mobile-menu-toggle" class="hamburger-btn" aria-label="Toggle menu">
+      <svg class="hamburger-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+      </svg>
+      <svg class="close-icon hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+      </svg>
+    </button>
+    <span class="mobile-title">{projectTitle || 'Documentation'}</span>
+    <button id="mobile-search-trigger" class="mobile-search-btn" aria-label="Search">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+      </svg>
+    </button>
+  </header>
+
+  <!-- Mobile Sidebar Overlay -->
+  <div id="mobile-sidebar-overlay" class="mobile-overlay hidden"></div>
+  
+  <!-- Mobile Sidebar -->
+  <div id="mobile-sidebar" class="mobile-sidebar">
+    <div class="mobile-sidebar-content">
+      {baseUrl && <a href="/" class="inline-block text-blue-400 no-underline text-base mb-4 hover:text-blue-300 transition-colors">← กลับหน้าหลัก</a>}      
+      {navigation && navigation.length > 0 && (
+        <nav>
+          {navigation.map((section) => (
+            <div class="mb-4 mobile-section-group" data-active="true">
+              <button 
+                class="mobile-section-toggle w-full flex items-center justify-between text-base font-semibold text-slate-400 uppercase tracking-wider py-2 px-2 rounded-md hover:bg-slate-700 hover:text-slate-300 transition-all cursor-pointer bg-transparent border-none text-left"
+                aria-expanded="true"
+              >
+                <span>{section.title}</span>
+                <svg class="chevron w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </button>
+              <ul class="mobile-section-items list-none p-0 m-0 pl-2">
+                {section.items.map((item) => (
+                  <li class="mb-1">
+                    <a 
+                      href={baseUrl ? `${baseUrl}/${item.slug}` : `/docs/${item.slug}`}
+                      class:list={[
+                        'block px-3 py-2 text-slate-300 no-underline rounded-md transition-all text-base',
+                        (currentPath || Astro.url.pathname).includes(item.slug) ? 'bg-blue-600 text-white font-medium' : 'hover:bg-slate-700 hover:text-slate-50'
+                      ]}
+                    >
+                      {item.title}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </nav>
+      )}
+    </div>
+  </div>
+
   <div class="blog-layout">
     <aside class="sidebar-nav">
       {hasCustomSidebar ? (
@@ -287,27 +347,255 @@ const hasCustomSidebar = Astro.slots.has('sidebar');
   @media (max-width: 768px) {
     .blog-layout {
       grid-template-columns: 1fr;
-      padding: 2rem 1rem;
+      padding: 1rem;
+      padding-top: 4.5rem;
     }
 
     .sidebar-nav {
-      position: relative;
-      top: 0;
+      display: none;
     }
 
     .article-header h1 {
-      font-size: 2rem;
+      font-size: 1.75rem;
     }
 
     .article-header .description {
-      font-size: 1.125rem;
+      font-size: 1rem;
     }
 
     .content {
       font-size: 1rem;
     }
   }
+
+  /* Mobile Navbar */
+  .mobile-navbar {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3.5rem;
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid #334155;
+    z-index: 1000;
+    padding: 0 1rem;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .hamburger-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    background: transparent;
+    border: none;
+    color: #e2e8f0;
+    cursor: pointer;
+    border-radius: 0.5rem;
+    transition: background 0.2s;
+  }
+
+  .hamburger-btn:hover {
+    background: rgba(71, 85, 105, 0.5);
+  }
+
+  .hamburger-btn svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .hamburger-btn .hidden {
+    display: none;
+  }
+
+  .mobile-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #f1f5f9;
+    text-align: center;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .mobile-search-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    cursor: pointer;
+    border-radius: 0.5rem;
+    transition: all 0.2s;
+  }
+
+  .mobile-search-btn:hover {
+    background: rgba(71, 85, 105, 0.5);
+    color: #e2e8f0;
+  }
+
+  /* Mobile Overlay */
+  .mobile-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 998;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .mobile-overlay.visible {
+    opacity: 1;
+  }
+
+  .mobile-overlay.hidden {
+    display: none;
+  }
+
+  /* Mobile Sidebar */
+  .mobile-sidebar {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 280px;
+    max-width: 85vw;
+    height: 100vh;
+    height: 100dvh;
+    background: #0f172a;
+    border-right: 1px solid #334155;
+    z-index: 999;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    overflow-y: auto;
+  }
+
+  .mobile-sidebar.open {
+    transform: translateX(0);
+  }
+
+  .mobile-sidebar-content {
+    padding: 1.5rem;
+    padding-top: 1rem;
+  }
+
+  .mobile-section-group[data-active="true"] .mobile-section-items {
+    max-height: 1000px;
+    opacity: 1;
+  }
+
+  .mobile-section-group[data-active="false"] .mobile-section-items {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+  }
+
+  .mobile-section-group[data-active="true"] .chevron {
+    transform: rotate(180deg);
+  }
+
+  .mobile-section-group[data-active="false"] .chevron {
+    transform: rotate(0deg);
+  }
+
+  @media (max-width: 768px) {
+    .mobile-navbar {
+      display: flex;
+    }
+
+    .mobile-sidebar {
+      display: block;
+    }
+
+    .mobile-overlay {
+      display: block;
+    }
+  }
 </style>
+
+<script>
+  // Mobile sidebar toggle
+  document.addEventListener('DOMContentLoaded', () => {
+    const menuToggle = document.getElementById('mobile-menu-toggle');
+    const mobileSidebar = document.getElementById('mobile-sidebar');
+    const mobileOverlay = document.getElementById('mobile-sidebar-overlay');
+    const hamburgerIcon = menuToggle?.querySelector('.hamburger-icon');
+    const closeIcon = menuToggle?.querySelector('.close-icon');
+    const mobileSearchTrigger = document.getElementById('mobile-search-trigger');
+
+    function openMobileSidebar() {
+      mobileSidebar?.classList.add('open');
+      mobileOverlay?.classList.remove('hidden');
+      setTimeout(() => mobileOverlay?.classList.add('visible'), 10);
+      hamburgerIcon?.classList.add('hidden');
+      closeIcon?.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeMobileSidebar() {
+      mobileSidebar?.classList.remove('open');
+      mobileOverlay?.classList.remove('visible');
+      setTimeout(() => mobileOverlay?.classList.add('hidden'), 300);
+      hamburgerIcon?.classList.remove('hidden');
+      closeIcon?.classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+
+    menuToggle?.addEventListener('click', () => {
+      if (mobileSidebar?.classList.contains('open')) {
+        closeMobileSidebar();
+      } else {
+        openMobileSidebar();
+      }
+    });
+
+    mobileOverlay?.addEventListener('click', closeMobileSidebar);
+
+    // Mobile section toggles
+    const mobileToggles = document.querySelectorAll('.mobile-section-toggle');
+    mobileToggles.forEach(toggle => {
+      toggle.addEventListener('click', () => {
+        const group = toggle.closest('.mobile-section-group');
+        if (group) {
+          const isActive = group.getAttribute('data-active') === 'true';
+          group.setAttribute('data-active', (!isActive).toString());
+          toggle.setAttribute('aria-expanded', (!isActive).toString());
+        }
+      });
+    });
+
+    // Close sidebar when clicking a link
+    const sidebarLinks = mobileSidebar?.querySelectorAll('a');
+    sidebarLinks?.forEach(link => {
+      link.addEventListener('click', () => {
+        closeMobileSidebar();
+      });
+    });
+
+    // Mobile search trigger - open the main search modal
+    mobileSearchTrigger?.addEventListener('click', () => {
+      const searchModal = document.getElementById('search-modal');
+      if (searchModal) {
+        searchModal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+        const searchInput = document.getElementById('modal-search-input') as HTMLInputElement;
+        setTimeout(() => searchInput?.focus(), 100);
+      }
+    });
+  });
+</script>
 
 <script>
   // Add copy button to all code blocks
