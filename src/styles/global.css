@@ -6,6 +6,312 @@
   --color-zinc-950: #000000;
 }
 
+/* ========================================
+   LIGHT MODE STYLES (Default when no .dark)
+   ======================================== */
+
+/* Body */
+html:not(.dark) body {
+  background: #ffffff;
+  color: #18181b;
+}
+
+/* Navbar */
+html:not(.dark) .navbar {
+  background: rgba(255, 255, 255, 0.9);
+  border-bottom-color: #e4e4e7;
+}
+
+html:not(.dark) .navbar .brand-text {
+  color: #18181b;
+}
+
+html:not(.dark) .navbar .search-box {
+  background: #f4f4f5;
+  border-color: #e4e4e7;
+}
+
+html:not(.dark) .navbar .search-box:hover {
+  background: #e4e4e7;
+  border-color: #d4d4d8;
+}
+
+html:not(.dark) .navbar .search-placeholder {
+  color: #71717a;
+}
+
+html:not(.dark) .navbar .search-shortcut {
+  background: #e4e4e7;
+  border-color: #d4d4d8;
+  color: #52525b;
+}
+
+html:not(.dark) .navbar .version-tag {
+  background: rgba(59, 130, 246, 0.1);
+  border-color: rgba(59, 130, 246, 0.2);
+}
+
+html:not(.dark) .navbar .theme-toggle,
+html:not(.dark) .navbar .github-link {
+  color: #52525b;
+}
+
+html:not(.dark) .navbar .theme-toggle:hover,
+html:not(.dark) .navbar .github-link:hover {
+  color: #18181b;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* Sidebar */
+html:not(.dark) aside {
+  background: #ffffff;
+}
+
+html:not(.dark) aside h2 {
+  color: #18181b !important;
+}
+
+html:not(.dark) aside a.text-blue-400 {
+  color: #3b82f6 !important;
+}
+
+html:not(.dark) .section-toggle {
+  color: #52525b;
+}
+
+html:not(.dark) .section-toggle:hover {
+  background: #f4f4f5;
+  color: #18181b;
+}
+
+html:not(.dark) .section-items a {
+  color: #52525b;
+}
+
+html:not(.dark) .section-items a:hover {
+  background: #f4f4f5;
+  color: #18181b;
+}
+
+html:not(.dark) .section-items a.bg-blue-600 {
+  background: #3b82f6;
+  color: #ffffff;
+}
+
+/* Content Area */
+html:not(.dark) .article-header h1 {
+  color: #18181b !important;
+}
+
+html:not(.dark) .article-header .description {
+  color: #52525b !important;
+}
+
+html:not(.dark) .content {
+  color: #3f3f46 !important;
+}
+
+html:not(.dark) .content h1,
+html:not(.dark) .content h2,
+html:not(.dark) .content h3,
+html:not(.dark) .content h4,
+html:not(.dark) .content h5,
+html:not(.dark) .content h6 {
+  color: #18181b !important;
+}
+
+html:not(.dark) .content p {
+  color: #3f3f46 !important;
+}
+
+html:not(.dark) .content strong {
+  color: #18181b !important;
+}
+
+html:not(.dark) .content li {
+  color: #3f3f46 !important;
+}
+
+html:not(.dark) .content ul > li::before {
+  color: #3b82f6 !important;
+}
+
+html:not(.dark) .content pre {
+  background: #f8fafc !important;
+  border-color: #e2e8f0 !important;
+}
+
+html:not(.dark) .content pre code {
+  color: #1e293b !important;
+}
+
+html:not(.dark) .content pre .copy-button {
+  background: #e2e8f0 !important;
+  border-color: #cbd5e1 !important;
+  color: #64748b !important;
+}
+
+html:not(.dark) .content pre .copy-button:hover {
+  background: #cbd5e1 !important;
+  color: #334155 !important;
+}
+
+html:not(.dark) .content code {
+  background: rgba(59, 130, 246, 0.08) !important;
+  color: #2563eb !important;
+  border-color: rgba(59, 130, 246, 0.15) !important;
+}
+
+html:not(.dark) .content pre code {
+  background: transparent !important;
+  border: none !important;
+}
+
+html:not(.dark) .content blockquote {
+  color: #64748b !important;
+  border-left-color: #3b82f6 !important;
+}
+
+html:not(.dark) .content th {
+  background: #f8fafc !important;
+  color: #18181b !important;
+}
+
+html:not(.dark) .content td {
+  color: #3f3f46 !important;
+  border-color: #e2e8f0 !important;
+}
+
+html:not(.dark) .content tr:hover {
+  background: rgba(248, 250, 252, 0.5);
+}
+
+/* TOC */
+html:not(.dark) .toc-list {
+  border-left-color: #e4e4e7;
+}
+
+html:not(.dark) aside h4 {
+  color: #18181b !important;
+}
+
+html:not(.dark) .toc-link {
+  color: #71717a;
+}
+
+html:not(.dark) .toc-link:hover,
+html:not(.dark) .toc-link.active {
+  color: #3b82f6;
+}
+
+/* Search Modal */
+html:not(.dark) .modal-content {
+  background: #ffffff;
+  border-color: #e4e4e7;
+}
+
+html:not(.dark) .search-input-wrapper {
+  background: #fafafa;
+  border-bottom-color: #e4e4e7;
+}
+
+html:not(.dark) .modal-search-input {
+  color: #18181b;
+}
+
+html:not(.dark) .modal-search-input::placeholder {
+  color: #a1a1aa;
+}
+
+html:not(.dark) .search-result-item:hover {
+  background: #f4f4f5;
+}
+
+html:not(.dark) .search-result-title {
+  color: #18181b;
+}
+
+html:not(.dark) .search-result-desc {
+  color: #71717a;
+}
+
+html:not(.dark) .search-category {
+  color: #3b82f6;
+}
+
+/* Index Page */
+html:not(.dark) .min-h-screen.bg-zinc-950 {
+  background: #ffffff !important;
+}
+
+html:not(.dark) .bg-zinc-900\/50,
+html:not(.dark) .bg-zinc-900 {
+  background: #f8fafc !important;
+}
+
+html:not(.dark) .border-zinc-800 {
+  border-color: #e2e8f0 !important;
+}
+
+html:not(.dark) .text-white {
+  color: #18181b !important;
+}
+
+html:not(.dark) .text-zinc-400,
+html:not(.dark) .text-zinc-500 {
+  color: #64748b !important;
+}
+
+/* Mobile Navbar */
+html:not(.dark) .mobile-navbar {
+  background: rgba(255, 255, 255, 0.95);
+  border-bottom-color: #e4e4e7;
+}
+
+html:not(.dark) .mobile-title {
+  color: #18181b;
+}
+
+html:not(.dark) .hamburger-btn,
+html:not(.dark) .mobile-search-btn {
+  color: #52525b;
+}
+
+html:not(.dark) .hamburger-btn:hover,
+html:not(.dark) .mobile-search-btn:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: #18181b;
+}
+
+/* Mobile Sidebar */
+html:not(.dark) .mobile-sidebar {
+  background: #ffffff;
+  border-right-color: #e4e4e7;
+}
+
+/* Breadcrumb */
+html:not(.dark) .breadcrumb a,
+html:not(.dark) .breadcrumb .home-icon {
+  color: #71717a;
+}
+
+html:not(.dark) .breadcrumb a:hover,
+html:not(.dark) .breadcrumb .home-icon:hover {
+  color: #3b82f6;
+}
+
+html:not(.dark) .breadcrumb .current {
+  color: #3b82f6;
+}
+
+html:not(.dark) .breadcrumb .separator {
+  color: #d4d4d8;
+}
+
+/* ========================================
+   DARK MODE STYLES (with .dark class)
+   ======================================== */
+
 /* Better list styling */
 .content ul {
   list-style: none;

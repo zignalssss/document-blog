@@ -6,12 +6,11 @@ import projectsConfig from '../../projects-config.json';
 
 const { projects } = projectsConfig;
 
-// สำหรับแต่ละ project, หาหน้าแรก
 const projectLinks = await Promise.all(projects.map(async (project) => {
   try {
     const configModule = await import(`../content/${project.id}/docs-config.json`);
     const { navigation } = configModule.default;
-    // ใช้หน้าแรกของ section แรก
+
     const firstSlug = navigation[0]?.items[0]?.slug || 'introduction';
     return {
       ...project,
@@ -35,31 +34,37 @@ const projectLinks = await Promise.all(projects.map(async (project) => {
   <SearchModal />
   
   <div class="min-h-screen bg-zinc-950 py-16 px-8 pt-24">
-    <header class="text-center mb-16">
+    <header class="text-center mb-12">
       <h1 class="text-3xl font-bold text-white mb-4">Documentation Hub</h1>
-      <p class="text-2xl text-zinc-400">เลือก Topic ที่ต้องการเรียนรู้</p>
+      <p class="text-xl text-zinc-400">เลือก Topic ที่ต้องการเรียนรู้</p>
     </header>
 
-    <div class="max-w-6xl mx-auto grid grid-cols-[repeat(auto-fit,minmax(350px,1fr))] gap-8 mb-16">
-      {projectLinks.map((project) => (
-        <a 
-          href={project.url} 
-          class="group relative overflow-hidden bg-zinc-900 border-2 border-zinc-800 rounded-2xl p-10 no-underline transition-all duration-300 hover:-translate-y-2 hover:border-blue-500 hover:shadow-[0_20px_40px_rgba(59,130,246,0.2)]"
-        >
-          {project.icon && (
-			<img 
-			  src={project.icon} 
-			  alt={`${project.title} icon`} 
-			  class="w-16 h-16 mb-6"
-			/>
-		  )}
-          <h2 class="text-3xl font-semibold text-white mb-3">{project.title}</h2>
-          <p class="text-lg text-zinc-400 leading-relaxed mb-6">{project.description}</p>
-          <div class="absolute bottom-8 right-8 text-3xl text-blue-400 opacity-0 -translate-x-3 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0">
-            →
-          </div>
-        </a>
-      ))}
+    <div class="max-w-2xl mx-auto mb-16">
+      <ul class="space-y-2">
+        {projectLinks.map((project) => (
+          <li>
+            <a 
+              href={project.url} 
+              class="group flex items-center gap-4 px-5 py-4 bg-zinc-900/50 border border-zinc-800 rounded-lg no-underline transition-all duration-200 hover:bg-zinc-800 hover:border-zinc-700"
+            >
+              {project.icon && (
+                <img 
+                  src={project.icon} 
+                  alt={`${project.title} icon`} 
+                  class="w-8 h-8 flex-shrink-0"
+                />
+              )}
+              <div class="flex-1 min-w-0">
+                <h2 class="text-lg font-medium text-white group-hover:text-blue-400 transition-colors">{project.title}</h2>
+                <p class="text-sm text-zinc-500 truncate">{project.description}</p>
+              </div>
+              <svg class="w-5 h-5 text-zinc-600 group-hover:text-blue-400 transition-colors flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+              </svg>
+            </a>
+          </li>
+        ))}
+      </ul>
     </div>
 
     <footer class="text-center text-zinc-500 text-base">
@@ -70,16 +75,8 @@ const projectLinks = await Promise.all(projects.map(async (project) => {
 
 <style>
   @media (max-width: 768px) {
-    .text-6xl {
-      font-size: 2.5rem;
-    }
-
-    .text-2xl {
-      font-size: 1.25rem;
-    }
-
-    .grid {
-      grid-template-columns: 1fr;
+    .max-w-2xl {
+      padding: 0 0.5rem;
     }
   }
 </style>

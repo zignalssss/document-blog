@@ -43,7 +43,6 @@ const hasCustomSidebar = Astro.slots.has('sidebar');
 ---
 
 <Layout title={title}>
-  <!-- Desktop Navbar -->
   <Navbar 
     projectTitle={projectTitle || 'Documentation'}
     version="v1.0.0"
@@ -51,7 +50,6 @@ const hasCustomSidebar = Astro.slots.has('sidebar');
   />
   <SearchModal />
 
-  <!-- Mobile Navbar -->
   <header class="mobile-navbar">
     <button id="mobile-menu-toggle" class="hamburger-btn" aria-label="Toggle menu">
       <svg class="hamburger-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -69,10 +67,8 @@ const hasCustomSidebar = Astro.slots.has('sidebar');
     </button>
   </header>
 
-  <!-- Mobile Sidebar Overlay -->
   <div id="mobile-sidebar-overlay" class="mobile-overlay hidden"></div>
   
-  <!-- Mobile Sidebar -->
   <div id="mobile-sidebar" class="mobile-sidebar">
     <div class="mobile-sidebar-content">
       {baseUrl && <a href="/" class="inline-block text-blue-400 no-underline text-base mb-4 hover:text-blue-300 transition-colors">← กลับหน้าหลัก</a>}      

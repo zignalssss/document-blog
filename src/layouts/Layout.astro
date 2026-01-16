@@ -1,5 +1,11 @@
 ---
 import '../styles/global.css';
+
+interface Props {
+  title?: string;
+}
+
+const { title = 'Project Documentation' } = Astro.props;
 ---
 
 <!doctype html>
@@ -12,9 +18,17 @@ import '../styles/global.css';
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 		<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Project Documentation</title>
+		<title>{title}</title>
+		<script is:inline>
+			// Check theme on page load (before render to prevent flash)
+			const savedTheme = localStorage.getItem('theme');
+			const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+			if (savedTheme === 'light' || (!savedTheme && !prefersDark)) {
+				document.documentElement.classList.remove('dark');
+			}
+		</script>
 	</head>
-	<body class="m-0 w-full h-full bg-slate-900 text-slate-200 font-['Kanit']">
+	<body class="m-0 w-full h-full font-['Kanit'] bg-zinc-950 text-zinc-200 dark:bg-zinc-950 dark:text-zinc-200 transition-colors duration-200">
 		<slot />
 	</body>
 </html>
