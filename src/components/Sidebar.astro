@@ -19,7 +19,23 @@ const isSectionActive = (section: NavSection) => {
 <aside class="sticky top-8 h-fit p-6 ">
   <div class="mb-6">
     {baseUrl && <a href="/" class="inline-block text-blue-400 no-underline text-base mb-4 hover:text-blue-300 transition-colors">← กลับหน้าหลัก</a>}
-    <h2 class="text-xl font-bold text-slate-50 mb-6">{title}</h2>
+    <h2 class="text-xl font-bold text-slate-50 mb-4">{title}</h2>
+    
+    <!-- Search Box -->
+    <div class="search-container mb-4">
+      <div class="relative">
+        <svg class="search-icon absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+        </svg>
+        <input 
+          type="text" 
+          id="sidebar-search"
+          placeholder="Search..."
+          class="w-full pl-10 pr-4 py-2 bg-slate-700 border border-slate-600 rounded-lg text-slate-200 text-sm placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
+        />
+      </div>
+      <div id="search-results" class="hidden mt-2 bg-slate-700 rounded-lg border border-slate-600 max-h-60 overflow-y-auto"></div>
+    </div>
   </div>
   
   {navigation && navigation.length > 0 ? (
@@ -87,6 +103,7 @@ const isSectionActive = (section: NavSection) => {
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
+    // Section toggle functionality
     const toggles = document.querySelectorAll('.section-toggle');
     
     toggles.forEach(toggle => {
@@ -99,5 +116,78 @@ const isSectionActive = (section: NavSection) => {
         }
       });
     });
+
+    // Search functionality
+    const searchInput = document.getElementById('sidebar-search') as HTMLInputElement;
+    const searchResults = document.getElementById('search-results');
+    const navItems = document.querySelectorAll('.section-items a');
+    
+    interface SearchItem {
+      title: string;
+      href: string;
+      section: string;
+    }
+    
+    // Build search index
+    const searchIndex: SearchItem[] = [];
+    document.querySelectorAll('.section-group').forEach(group => {
+      const sectionTitle = group.querySelector('.section-toggle span')?.textContent || '';
+      group.querySelectorAll('.section-items a').forEach(link => {
+        searchIndex.push({
+          title: link.textContent || '',
+          href: link.getAttribute('href') || '',
+          section: sectionTitle
+        });
+      });
+    });
+
+    if (searchInput && searchResults) {
+      searchInput.addEventListener('input', (e) => {
+        const query = (e.target as HTMLInputElement).value.toLowerCase().trim();
+        
+        if (query.length === 0) {
+          searchResults.classList.add('hidden');
+          searchResults.innerHTML = '';
+          // Show all items
+          navItems.forEach(item => {
+            (item as HTMLElement).style.display = '';
+          });
+          return;
+        }
+
+        // Filter results
+        const filtered = searchIndex.filter(item => 
+          item.title.toLowerCase().includes(query) ||
+          item.section.toLowerCase().includes(query)
+        );
+
+        if (filtered.length > 0) {
+          searchResults.classList.remove('hidden');
+          searchResults.innerHTML = filtered.map(item => `
+            <a href="${item.href}" class="block px-3 py-2 text-sm text-slate-300 hover:bg-slate-600 hover:text-white transition-colors first:rounded-t-lg last:rounded-b-lg">
+              <span class="text-slate-400 text-xs">${item.section}</span>
+              <div>${item.title}</div>
+            </a>
+          `).join('');
+        } else {
+          searchResults.classList.remove('hidden');
+          searchResults.innerHTML = '<div class="px-3 py-2 text-sm text-slate-400">No results found</div>';
+        }
+      });
+
+      // Hide results on blur (with delay for click)
+      searchInput.addEventListener('blur', () => {
+        setTimeout(() => {
+          searchResults.classList.add('hidden');
+        }, 200);
+      });
+
+      // Show results on focus if has value
+      searchInput.addEventListener('focus', () => {
+        if (searchInput.value.trim().length > 0) {
+          searchResults.classList.remove('hidden');
+        }
+      });
+    }
   });
 </script>
