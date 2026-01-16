@@ -1,5 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import SearchModal from '../components/SearchModal.astro';
 import projectsConfig from '../../projects-config.json';
 
 const { projects } = projectsConfig;
@@ -25,7 +27,14 @@ const projectLinks = await Promise.all(projects.map(async (project) => {
 ---
 
 <Layout title="Documentation Hub">
-  <div class="min-h-screen bg-slate-925 py-16 px-8">
+  <Navbar 
+    projectTitle="Documentation Hub"
+    version="v1.0.0"
+    githubUrl="https://github.com"
+  />
+  <SearchModal />
+  
+  <div class="min-h-screen bg-slate-925 py-16 px-8 pt-24">
     <header class="text-center mb-16">
       <h1 class="text-6xl font-bold text-slate-50 mb-4">Documentation Hub</h1>
       <p class="text-2xl text-slate-400">เลือก Content ที่ต้องการเรียนรู้</p>

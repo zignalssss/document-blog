@@ -3,6 +3,8 @@ import Layout from './Layout.astro';
 import Sidebar from '../components/Sidebar.astro';
 import Toc from '../components/Toc.astro';
 import Breadcrumb from '../components/Breadcrumb.astro';
+import Navbar from '../components/Navbar.astro';
+import SearchModal from '../components/SearchModal.astro';
 import type { DocsLayoutProps, BreadcrumbItem } from '../types';
 
 type Props = DocsLayoutProps;
@@ -41,6 +43,14 @@ const hasCustomSidebar = Astro.slots.has('sidebar');
 ---
 
 <Layout title={title}>
+  <!-- Desktop Navbar -->
+  <Navbar 
+    projectTitle={projectTitle || 'Documentation'}
+    version="v1.0.0"
+    githubUrl="https://github.com"
+  />
+  <SearchModal />
+
   <!-- Mobile Navbar -->
   <header class="mobile-navbar">
     <button id="mobile-menu-toggle" class="hamburger-btn" aria-label="Toggle menu">
@@ -146,12 +156,13 @@ const hasCustomSidebar = Astro.slots.has('sidebar');
     width: 100%;
     gap: 5rem;
     padding: 2rem 1.5rem;
+    padding-top: 6rem;
     min-height: 100vh;
   }
 
   .sidebar-nav {
     position: sticky;
-    top: 2rem;
+    top: 6rem;
     height: fit-content;
   }
 
@@ -161,7 +172,7 @@ const hasCustomSidebar = Astro.slots.has('sidebar');
 
   .toc-nav {
     position: sticky;
-    top: 2rem;
+    top: 6rem;
     height: fit-content;
   }
 
