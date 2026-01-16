@@ -11,9 +11,9 @@ const toc = headings.filter((h) => h.depth <= 3);
 
 {toc.length > 0 && (
   <aside class="sticky top-8 h-fit p-4">
-    <h4 class="text-base font-semibold text-slate-50 mb-4">On this page</h4>
+    <h4 class="text-base font-semibold text-white mb-4">On this page</h4>
     <nav>
-      <ul class="toc-list list-none pl-4 m-0 border-l-2 border-slate-700">
+      <ul class="toc-list list-none pl-4 m-0 border-l-2 border-zinc-700">
         {toc.map((heading) => (
           <li class:list={[
             'mb-2',
@@ -23,7 +23,7 @@ const toc = headings.filter((h) => h.depth <= 3);
             <a 
               href={`#${heading.slug}`} 
               data-slug={heading.slug}
-              class="toc-link block text-slate-400 no-underline transition-colors hover:text-blue-400 text-base"
+              class="toc-link block text-zinc-400 no-underline transition-colors hover:text-blue-400 text-base"
             >
               {heading.text}
             </a>

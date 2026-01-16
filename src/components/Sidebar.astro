@@ -18,7 +18,7 @@ const isSectionActive = (section: NavSection) => {
 
 <aside class="sticky top-8 h-fit px-6 ">
   <div class="mb-6">
-    {baseUrl && <a href="/" class="inline-block text-green-400 no-underline text-base mb-4 hover:text-green-300 transition-colors">← กลับหน้าหลัก</a>}
+    {baseUrl && <a href="/" class="inline-block text-blue-400 no-underline text-base mb-4 hover:text-blue-300 transition-colors">← กลับหน้าหลัก</a>}
     <h2 class="text-xl font-bold text-white mb-4">{title}</h2>
   </div>
   
@@ -42,7 +42,7 @@ const isSectionActive = (section: NavSection) => {
                   href={baseUrl ? `${baseUrl}/${item.slug}` : `/docs/${item.slug}`}
                   class:list={[
                     'block px-3 py-2 text-zinc-300 no-underline rounded-md transition-all text-base',
-                    isActive(item.slug) ? 'bg-green-600 text-white font-medium' : 'hover:bg-zinc-800 hover:text-white'
+                    isActive(item.slug) ? 'bg-blue-600 text-white font-medium' : 'hover:bg-zinc-800 hover:text-white'
                   ]}
                 >
                   {item.title}

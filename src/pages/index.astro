@@ -34,17 +34,17 @@ const projectLinks = await Promise.all(projects.map(async (project) => {
   />
   <SearchModal />
   
-  <div class="min-h-screen bg-slate-925 py-16 px-8 pt-24">
+  <div class="min-h-screen bg-zinc-950 py-16 px-8 pt-24">
     <header class="text-center mb-16">
-      <h1 class="text-6xl font-bold text-slate-50 mb-4">Documentation Hub</h1>
-      <p class="text-2xl text-slate-400">เลือก Content ที่ต้องการเรียนรู้</p>
+      <h1 class="text-3xl font-bold text-white mb-4">Documentation Hub</h1>
+      <p class="text-2xl text-zinc-400">เลือก Topic ที่ต้องการเรียนรู้</p>
     </header>
 
     <div class="max-w-6xl mx-auto grid grid-cols-[repeat(auto-fit,minmax(350px,1fr))] gap-8 mb-16">
       {projectLinks.map((project) => (
         <a 
           href={project.url} 
-          class="group relative overflow-hidden bg-slate-800 border-2 border-slate-700 rounded-2xl p-10 no-underline transition-all duration-300 hover:-translate-y-2 hover:border-blue-400 hover:shadow-[0_20px_40px_rgba(59,130,246,0.2)]"
+          class="group relative overflow-hidden bg-zinc-900 border-2 border-zinc-800 rounded-2xl p-10 no-underline transition-all duration-300 hover:-translate-y-2 hover:border-blue-500 hover:shadow-[0_20px_40px_rgba(59,130,246,0.2)]"
         >
           {project.icon && (
 			<img 
@@ -53,8 +53,8 @@ const projectLinks = await Promise.all(projects.map(async (project) => {
 			  class="w-16 h-16 mb-6"
 			/>
 		  )}
-          <h2 class="text-3xl font-semibold text-slate-50 mb-3">{project.title}</h2>
-          <p class="text-lg text-slate-400 leading-relaxed mb-6">{project.description}</p>
+          <h2 class="text-3xl font-semibold text-white mb-3">{project.title}</h2>
+          <p class="text-lg text-zinc-400 leading-relaxed mb-6">{project.description}</p>
           <div class="absolute bottom-8 right-8 text-3xl text-blue-400 opacity-0 -translate-x-3 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0">
             →
           </div>
@@ -62,7 +62,7 @@ const projectLinks = await Promise.all(projects.map(async (project) => {
       ))}
     </div>
 
-    <footer class="text-center text-slate-500 text-base">
+    <footer class="text-center text-zinc-500 text-base">
       <p>เลือก documentation ที่ต้องการด้านบน</p>
     </footer>
   </div>
