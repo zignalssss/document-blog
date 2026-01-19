@@ -15,10 +15,14 @@ const { title, description, headings, navigation, currentPath, projectTitle, bas
 const pathParts = (currentPath || Astro.url.pathname).split('/').filter(Boolean);
 const breadcrumbItems: BreadcrumbItem[] = [];
 
+// หา item แรกของ navigation สำหรับลิงก์หน้าแรกของ doc
+const firstNavItem = navigation?.[0]?.items?.[0];
+const docIndexHref = firstNavItem ? `${baseUrl}/${firstNavItem.slug}` : baseUrl;
+
 if (projectTitle && baseUrl) {
   breadcrumbItems.push({
     label: projectTitle.replace(/^[^\s]+\s/, ''), // ลบ emoji
-    href: baseUrl
+    href: docIndexHref
   });
 }
 
@@ -29,8 +33,7 @@ if (navigation && pathParts.length >= 2) {
     const foundItem = section.items.find(item => item.slug === currentSlug);
     if (foundItem) {
       breadcrumbItems.push({
-        label: section.title,
-        href: undefined
+        label: section.title
       });
       breadcrumbItems.push({
         label: foundItem.title
@@ -45,8 +48,6 @@ const hasCustomSidebar = Astro.slots.has('sidebar');
 <Layout title={title}>
   <Navbar 
     projectTitle={projectTitle || 'Documentation'}
-    version="v1.0.3"
-    githubUrl="https://github.com/zignalssss/document-blog"
   />
   <SearchModal />
 
