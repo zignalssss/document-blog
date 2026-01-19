@@ -371,6 +371,8 @@ for (const [filePath, rawContent] of Object.entries(rawFiles)) {
 </style>
 
 <script>
+  import Fuse from 'fuse.js';
+
   document.addEventListener('DOMContentLoaded', () => {
     // Move modal to body for proper stacking
     const searchModal = document.getElementById('search-modal');
@@ -386,6 +388,37 @@ for (const [filePath, rawContent] of Object.entries(rawFiles)) {
     // Get search index from window (built at compile time)
     const searchIndex = (window as any).__SEARCH_INDEX__ || [];
     const headingsIndex = (window as any).__HEADINGS_INDEX__ || [];
+
+    // Initialize Fuse.js for documents
+    const fuseDocs = new Fuse(searchIndex, {
+      keys: [
+        { name: 'title', weight: 0.4 },
+        { name: 'description', weight: 0.25 },
+        { name: 'headings', weight: 0.2 },
+        { name: 'content', weight: 0.15 }
+      ],
+      threshold: 0.3,
+      distance: 100,
+      includeScore: true,
+      includeMatches: true,
+      minMatchCharLength: 2,
+      ignoreLocation: true,
+      useExtendedSearch: true
+    });
+
+    // Initialize Fuse.js for headings
+    const fuseHeadings = new Fuse(headingsIndex, {
+      keys: [
+        { name: 'title', weight: 0.7 },
+        { name: 'parentTitle', weight: 0.3 }
+      ],
+      threshold: 0.3,
+      distance: 100,
+      includeScore: true,
+      includeMatches: true,
+      minMatchCharLength: 2,
+      ignoreLocation: true
+    });
 
     function openModal() {
       searchModal?.classList.remove('hidden');
@@ -404,7 +437,7 @@ for (const [filePath, rawContent] of Object.entries(rawFiles)) {
     (window as any).openSearchModal = openModal;
 
     closeModalBtn?.addEventListener('click', closeModal);
-    
+
     // Click anywhere outside modal content to close
     modalContainer?.addEventListener('click', (e) => {
       if (e.target === modalContainer) {
@@ -412,16 +445,32 @@ for (const [filePath, rawContent] of Object.entries(rawFiles)) {
       }
     });
 
-    // Highlight matching text
-    function highlightMatch(text: string, query: string): string {
-      if (!query) return text;
-      const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
-      return text.replace(regex, '<span class="search-highlight">$1</span>');
+    // Highlight matching text using Fuse.js matches
+    function highlightMatches(text: string, matches: any[] | undefined, key: string): string {
+      if (!matches) return text;
+
+      const match = matches.find((m: any) => m.key === key);
+      if (!match || !match.indices) return text;
+
+      let result = '';
+      let lastIndex = 0;
+
+      // Sort indices by start position
+      const sortedIndices = [...match.indices].sort((a, b) => a[0] - b[0]);
+
+      for (const [start, end] of sortedIndices) {
+        result += text.slice(lastIndex, start);
+        result += `<span class="search-highlight">${text.slice(start, end + 1)}</span>`;
+        lastIndex = end + 1;
+      }
+      result += text.slice(lastIndex);
+
+      return result;
     }
 
     // Format category name
     function formatCategory(cat: string): string {
-      return cat.split('-').map(word => 
+      return cat.split('-').map(word =>
         word.charAt(0).toUpperCase() + word.slice(1)
       ).join(' ');
     }
@@ -429,118 +478,17 @@ for (const [filePath, rawContent] of Object.entries(rawFiles)) {
     // Render search results grouped by category
     function renderResults(query: string) {
       if (!modalSearchResults) return;
-      
+
       if (query.length < 2) {
         modalSearchResults.innerHTML = '';
         return;
       }
 
-      const queryLower = query.toLowerCase();
-      
-      // Tokenize query into words (supports Thai and English)
-      const queryWords = queryLower
-        .split(/[\s,.\-_]+/)
-        .filter(word => word.length > 0);
+      // Search using Fuse.js
+      const docResults = fuseDocs.search(query, { limit: 15 });
+      const headingResults = fuseHeadings.search(query, { limit: 10 });
 
-      // Calculate match score for a document item
-      function calculateDocScore(item: any): number {
-        const titleLower = item.title.toLowerCase();
-        const descLower = item.description.toLowerCase();
-        const contentLower = item.content.toLowerCase();
-        const headingsLower = (item.headings || '').toLowerCase();
-
-        let score = 0;
-
-        // Exact full query match (highest priority)
-        if (titleLower.includes(queryLower)) score += 100;
-        if (descLower.includes(queryLower)) score += 50;
-        if (headingsLower.includes(queryLower)) score += 40;
-        if (contentLower.includes(queryLower)) score += 25;
-
-        // Individual word matches
-        for (const word of queryWords) {
-          if (word.length < 1) continue;
-
-          // Title matches (highest weight)
-          if (titleLower.includes(word)) {
-            score += 30;
-            if (titleLower.startsWith(word)) score += 20;
-            if (new RegExp(`\\b${word}\\b`).test(titleLower)) score += 15;
-          }
-
-          // Headings matches
-          if (headingsLower.includes(word)) {
-            score += 20;
-          }
-
-          // Description matches
-          if (descLower.includes(word)) {
-            score += 15;
-            if (new RegExp(`\\b${word}\\b`).test(descLower)) score += 10;
-          }
-
-          // Content matches
-          if (contentLower.includes(word)) {
-            score += 5;
-            const matches = contentLower.split(word).length - 1;
-            score += Math.min(matches * 2, 20);
-          }
-        }
-
-        // Bonus for matching more query words
-        const matchedWords = queryWords.filter(word =>
-          titleLower.includes(word) ||
-          descLower.includes(word) ||
-          headingsLower.includes(word) ||
-          contentLower.includes(word)
-        );
-        score += (matchedWords.length / queryWords.length) * 30;
-
-        return score;
-      }
-
-      // Calculate match score for a heading item
-      function calculateHeadingScore(item: any): number {
-        const titleLower = item.title.toLowerCase();
-        let score = 0;
-
-        if (titleLower.includes(queryLower)) score += 80;
-
-        for (const word of queryWords) {
-          if (word.length < 1) continue;
-          if (titleLower.includes(word)) {
-            score += 25;
-            if (titleLower.startsWith(word)) score += 15;
-          }
-        }
-
-        return score;
-      }
-
-      // Filter and score document results
-      const filteredDocs = searchIndex
-        .map((item: any) => ({
-          ...item,
-          score: calculateDocScore(item),
-          type: 'doc'
-        }))
-        .filter((item: any) => item.score > 0);
-
-      // Filter and score heading results
-      const filteredHeadings = headingsIndex
-        .map((item: any) => ({
-          ...item,
-          score: calculateHeadingScore(item),
-          type: 'heading'
-        }))
-        .filter((item: any) => item.score > 0);
-
-      // Combine and sort all results
-      const filtered = [...filteredDocs, ...filteredHeadings]
-        .sort((a: any, b: any) => b.score - a.score)
-        .slice(0, 25);
-
-      if (filtered.length === 0) {
+      if (docResults.length === 0 && headingResults.length === 0) {
         modalSearchResults.innerHTML = `
           <div class="no-results">
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -552,16 +500,13 @@ for (const [filePath, rawContent] of Object.entries(rawFiles)) {
         return;
       }
 
-      // Group by type first (docs, then headings), then by category
-      const docResults = filtered.filter((item: any) => item.type === 'doc');
-      const headingResults = filtered.filter((item: any) => item.type === 'heading');
-
       // Group docs by category
       const groupedDocs: { [key: string]: any[] } = {};
-      docResults.forEach((item: any) => {
+      docResults.forEach((result: any) => {
+        const item = result.item;
         const cat = item.category || 'General';
         if (!groupedDocs[cat]) groupedDocs[cat] = [];
-        groupedDocs[cat].push(item);
+        groupedDocs[cat].push({ ...item, matches: result.matches, score: result.score });
       });
 
       // Render results
@@ -572,15 +517,18 @@ for (const [filePath, rawContent] of Object.entries(rawFiles)) {
         html += `<div class="search-category">${formatCategory(category)}</div>`;
 
         (items as any[]).forEach((item: any) => {
+          const titleHighlighted = highlightMatches(item.title, item.matches, 'title');
+          const descHighlighted = item.description ? highlightMatches(item.description, item.matches, 'description') : '';
+
           html += `
             <a href="${item.url}" class="search-result-item" onclick="document.getElementById('search-modal').classList.add('hidden'); document.body.style.overflow = '';">
               <div class="search-result-title">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                 </svg>
-                ${highlightMatch(item.title, query)}
+                ${titleHighlighted}
               </div>
-              ${item.description ? `<div class="search-result-desc">${highlightMatch(item.description, query)}</div>` : ''}
+              ${descHighlighted ? `<div class="search-result-desc">${descHighlighted}</div>` : ''}
               <div class="search-result-path">${item.url}</div>
             </a>
           `;
@@ -591,14 +539,17 @@ for (const [filePath, rawContent] of Object.entries(rawFiles)) {
       if (headingResults.length > 0) {
         html += `<div class="search-category">Sections</div>`;
 
-        headingResults.forEach((item: any) => {
+        headingResults.forEach((result: any) => {
+          const item = result.item;
+          const titleHighlighted = highlightMatches(item.title, result.matches, 'title');
+
           html += `
             <a href="${item.url}" class="search-result-item" onclick="document.getElementById('search-modal').classList.add('hidden'); document.body.style.overflow = '';">
               <div class="search-result-title">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"></path>
                 </svg>
-                ${highlightMatch(item.title, query)}
+                ${titleHighlighted}
               </div>
               <div class="search-result-desc">ใน ${item.parentTitle}</div>
               <div class="search-result-path">${item.url}</div>

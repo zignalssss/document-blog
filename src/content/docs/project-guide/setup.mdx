@@ -45,6 +45,9 @@ npm install
 คำสั่งนี้จะติดตั้ง packages ที่จำเป็น:
 - `astro` - Framework หลัก
 - `@astrojs/mdx` - สำหรับเขียน MDX files
+- `fuse.js` - Fuzzy search สำหรับค้นหาเอกสาร
+- `katex`, `rehype-katex`, `remark-math` - รองรับสูตรคณิตศาสตร์
+- `tailwindcss` - CSS framework
 
 ### 3. ตรวจสอบโครงสร้างโปรเจค
 
@@ -52,20 +55,30 @@ npm install
 
 ```
 /
-├── docs-config.json
 ├── src/
 │   ├── content/
 │   │   ├── config.ts
 │   │   └── docs/
+│   │       └── {project-name}/
+│   │           └── *.mdx
+│   ├── types/
+│   │   ├── index.ts
+│   │   └── navigation.ts
 │   ├── layouts/
 │   │   ├── Layout.astro
 │   │   └── DocsLayout.astro
 │   ├── components/
 │   │   ├── Sidebar.astro
 │   │   ├── Toc.astro
-│   │   └── CodeBlock.astro
+│   │   ├── CodeBlock.astro
+│   │   ├── Navbar.astro
+│   │   ├── Breadcrumb.astro
+│   │   └── SearchModal.astro
+│   ├── styles/
+│   │   └── global.css
 │   └── pages/
-│       └── docs/
+│       ├── index.astro
+│       └── [project]/
 │           └── [...slug].astro
 ├── package.json
 └── astro.config.mjs
@@ -83,10 +96,17 @@ Server จะทำงานที่ `http://localhost:4321`
 
 เปิดเบราว์เซอร์ไปที่:
 ```
+http://localhost:4321
+```
+
+จะเห็นหน้าแรกที่แสดงรายการ Documentation ทั้งหมด
+
+หรือเข้าถึงเอกสารโดยตรง:
+```
 http://localhost:4321/docs/project-guide/setup
 ```
 
-ถ้าเห็นหน้านี้ แสดงว่าติดตั้งสำเร็จแล้ว! 🎉
+ถ้าเห็นหน้าเอกสาร แสดงว่าติดตั้งสำเร็จแล้ว!
 
 ## การตั้งค่าเพิ่มเติม
 
@@ -102,12 +122,19 @@ http://localhost:4321/docs/project-guide/setup
 
 แก้ไข `<html lang="th">` เป็นภาษาที่ต้องการ
 
-### ปรับแต่งสี Dark Mode
+### ปรับแต่ง Styles
 
 แก้ไข CSS ใน:
-- `src/layouts/DocsLayout.astro`
-- `src/components/Sidebar.astro`
-- `src/components/Toc.astro`
+- `src/styles/global.css` - Styles หลักของเว็บ
+- `src/layouts/DocsLayout.astro` - Layout ของหน้าเอกสาร
+- `src/components/*.astro` - Components ต่างๆ
+
+### ฟีเจอร์หลัก
+
+- **Search** - กด `Ctrl+K` หรือ `Cmd+K` เพื่อค้นหา (ใช้ Fuse.js fuzzy search)
+- **Math Support** - รองรับสูตรคณิตศาสตร์ด้วย KaTeX
+- **Breadcrumb** - แสดงตำแหน่งปัจจุบันในเอกสาร
+- **Table of Contents** - สารบัญอัตโนมัติจาก headings
 
 ## คำสั่งที่ใช้บ่อย
 
@@ -140,9 +167,10 @@ npm install
 
 ### MDX Files ไม่แสดง
 
-1. ตรวจสอบว่าไฟล์อยู่ใน `src/content/docs/`
-2. ตรวจสอบ frontmatter (title, description, category)
-3. Restart dev server
+1. ตรวจสอบว่าไฟล์อยู่ใน `src/content/{project-name}/{section-title}/`
+2. ตรวจสอบ frontmatter (title, description, order, category)
+3. ตรวจสอบว่า collection ถูกกำหนดใน `src/content/config.ts`
+4. Restart dev server
 
 ## ขั้นตอนถัดไป
 
