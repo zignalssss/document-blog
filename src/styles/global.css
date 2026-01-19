@@ -205,6 +205,10 @@ html:not(.dark) .toc-link.active {
 }
 
 /* Search Modal */
+html:not(.dark) .modal-backdrop {
+  background: rgba(0, 0, 0, 0.5) !important;
+}
+
 html:not(.dark) .modal-content {
   background: #ffffff;
   border-color: #e4e4e7;
